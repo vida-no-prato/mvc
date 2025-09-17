@@ -204,6 +204,15 @@ body {
     box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
 }
 
+
+
+
+
+
+
+
+
+
 /* Categories */
 .categories {
     margin-bottom: 60px;
@@ -283,6 +292,17 @@ body {
     color: #666;
     line-height: 1.6;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 /* Products Grid */
 .products {
@@ -407,6 +427,19 @@ body {
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Auth Modal Styles */
 .auth-modal {
@@ -772,6 +805,21 @@ body {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Cart Modal */
 .modal {
     display: none;
@@ -853,6 +901,18 @@ body {
     box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 /* Animations */
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
@@ -917,6 +977,18 @@ body {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .nav-links {
@@ -944,6 +1016,18 @@ body {
         align-items: center;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Loading Animation */
 .loading {

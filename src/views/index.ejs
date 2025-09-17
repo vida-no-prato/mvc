@@ -13,10 +13,10 @@
             <nav class="nav">
                 <div class="logo">Vida no Prato</div>
                 <ul class="nav-links">
-                    <li><a href="#inicio">Início</a></li>
-                    <li><a href="#categorias">Categorias</a></li>
-                    <li><a href="#produtos">Cardápio</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/categories">Categorias</a></li>
+                    <li><a href="#cardapio">Cardápio</a></li>
+                    <li><a href="/about">Sobre</a></li>
                 </ul>
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <button class="login-btn" onclick="openAuthModal()">
@@ -45,44 +45,9 @@
                 </div>
             </section>
 
-            <!-- Categories -->
-            <section class="categories" id="categorias">
-                <h2 class="section-title">Nossas Especialidades</h2>
-                <div class="category-grid">
-                    <div class="category-card" onclick="filterProducts('saladas')">
-                        <span class="category-icon">🥗</span>
-                        <h3>Saladas Frescas</h3>
-                        <p>Combinações criativas com ingredientes orgânicos e molhos especiais</p>
-                    </div>
-                    <div class="category-card" onclick="filterProducts('bowls')">
-                        <span class="category-icon">🍲</span>
-                        <h3>Bowls Nutritivos</h3>
-                        <p>Refeições completas e balanceadas em uma tigela</p>
-                    </div>
-                    <div class="category-card" onclick="filterProducts('sucos')">
-                        <span class="category-icon">🥤</span>
-                        <h3>Sucos Naturais</h3>
-                        <p>Bebidas refrescantes feitas com frutas selecionadas</p>
-                    </div>
-                    <div class="category-card" onclick="filterProducts('lanches')">
-                        <span class="category-icon">🥙</span>
-                        <h3>Lanches Saudáveis</h3>
-                        <p>Opções práticas e nutritivas para qualquer hora</p>
-                    </div>
-                </div>
-            </section>
-
             <!-- Products -->
             <section class="products" id="produtos">
                 <h2 class="section-title">Nosso Cardápio</h2>
-                
-                <div class="filter-bar">
-                    <button class="filter-btn active" onclick="filterProducts('todos')">Todos</button>
-                    <button class="filter-btn" onclick="filterProducts('saladas')">Saladas</button>
-                    <button class="filter-btn" onclick="filterProducts('bowls')">Bowls</button>
-                    <button class="filter-btn" onclick="filterProducts('sucos')">Sucos</button>
-                    <button class="filter-btn" onclick="filterProducts('lanches')">Lanches</button>
-                </div>
 
                 <div class="products-grid" id="productsGrid">
                     <!-- Products will be populated by JavaScript -->
@@ -210,5 +175,13 @@
     </div>
 
     <script src="/js/script.js"></script>
+
+    <script>
+    document.querySelector('a[href="#cardapio"]').addEventListener('click', function(event) {
+        event.preventDefault();
+        document.getElementById('produtos').scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+
 </body>
 </html>

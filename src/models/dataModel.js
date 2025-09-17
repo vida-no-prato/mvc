@@ -2,7 +2,7 @@
 // Simulando dados que normalmente viriam de um banco de dados
 
 // Dados da empresa/projeto para a landing page
-const companyInfo = {
+const about = {
   name: "TechSolutions",
   tagline: "Inovação e Tecnologia para o Futuro",
   description:
@@ -81,7 +81,7 @@ const stats = [
 class DataModel {
   // Métodos para obter dados
   getCompanyInfo() {
-    return companyInfo;
+    return about;
   }
 
   getCategories() {
