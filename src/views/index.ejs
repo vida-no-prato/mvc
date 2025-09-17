@@ -3,211 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Vida no Prato - Comida Saudável</title>
+   <link rel="stylesheet" href="/css/vida-no-prato.css">
 </head>
 <body>
-    <!-- Header/Navigation -->
+    <!-- Header -->
     <header class="header">
-        <nav class="nav">
-            <div class="nav-container">
-                <div class="nav-logo">
-                    <h2><%= company.name %></h2>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="#home" class="nav-link">Início</a></li>
-                    <li><a href="/services" class="nav-link">Serviços</a></li>
-                    <li><a href="/about" class="nav-link">Sobre</a></li>
-                    <li><a href="#testimonials" class="nav-link">Depoimentos</a></li>
-                    <li><a href="#contact" class="nav-link">Contato</a></li>
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">Vida no Prato</div>
+                <ul class="nav-links">
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#categorias">Categorias</a></li>
+                    <li><a href="#produtos">Cardápio</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
                 </ul>
-                <div class="nav-toggle">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <button class="login-btn" onclick="openAuthModal()">
+                        👤 Entrar
+                    </button>
+                    <button class="cart-btn" onclick="openCart()">
+                        🛒 Carrinho
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title"><%= company.tagline %></h1>
-                <p class="hero-description"><%= company.description %></p>
-                <div class="hero-buttons">
-                    <a href="#services" class="btn btn-primary">Nossos Serviços</a>
-                    <a href="#contact" class="btn btn-secondary">Entre em Contato</a>
-                </div>
-            </div>
-            <div class="hero-stats">
-                <% stats.forEach(stat => { %>
-                <div class="stat-item">
-                    <div class="stat-icon"><%= stat.icon %></div>
-                    <div class="stat-number"><%= stat.value %></div>
-                    <div class="stat-label"><%= stat.label %></div>
-                </div>
-                <% }); %>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="services">
+    <!-- Main Content -->
+    <main class="main-content">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Nossos Serviços</h2>
-                <p class="section-subtitle">Oferecemos soluções completas para seu negócio digital</p>
-            </div>
-            <div class="services-grid">
-                <% services.forEach(service => { %>
-                <div class="service-card">
-                    <div class="service-icon"><%= service.icon %></div>
-                    <h3 class="service-title"><%= service.title %></h3>
-                    <p class="service-description"><%= service.description %></p>
-                    <div class="service-price"><%= service.price %></div>
-                    <button class="btn btn-outline">Saiba Mais</button>
+            <!-- Hero Section -->
+            <section class="hero" id="inicio">
+                <div class="hero-content">
+                    <h1>Comida Saudável, Sabor Incrível</h1>
+                    <p>Descubra pratos deliciosos e nutritivos, entregues fresquinhos na sua porta</p>
+                    <button class="cta-btn" onclick="document.getElementById('produtos').scrollIntoView({behavior: 'smooth'})">
+                        Explorar Cardápio
+                    </button>
                 </div>
-                <% }); %>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2 class="section-title">Sobre a <%= company.name %></h2>
-                    <p>Fundada em <%= company.founded %>, somos uma empresa especializada em desenvolvimento de soluções tecnológicas inovadoras. Com mais de <%= company.employees %> profissionais qualificados, já entregamos mais de <%= company.projects %> projetos para clientes em todo o Brasil.</p>
-                    <p>Nossa missão é transformar ideias em soluções digitais que impulsionam o crescimento dos nossos clientes, utilizando as melhores práticas e tecnologias mais modernas do mercado.</p>
-                    <div class="about-features">
-                        <div class="feature">
-                            <span class="feature-icon">🎯</span>
-                            <span>Foco em Resultados</span>
-                        </div>
-                        <div class="feature">
-                            <span class="feature-icon">⚡</span>
-                            <span>Tecnologia de Ponta</span>
-                        </div>
-                        <div class="feature">
-                            <span class="feature-icon">🤝</span>
-                            <span>Parceria de Longo Prazo</span>
-                        </div>
+            <!-- Categories -->
+            <section class="categories" id="categorias">
+                <h2 class="section-title">Nossas Especialidades</h2>
+                <div class="category-grid">
+                    <div class="category-card" onclick="filterProducts('saladas')">
+                        <span class="category-icon">🥗</span>
+                        <h3>Saladas Frescas</h3>
+                        <p>Combinações criativas com ingredientes orgânicos e molhos especiais</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('bowls')">
+                        <span class="category-icon">🍲</span>
+                        <h3>Bowls Nutritivos</h3>
+                        <p>Refeições completas e balanceadas em uma tigela</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('sucos')">
+                        <span class="category-icon">🥤</span>
+                        <h3>Sucos Naturais</h3>
+                        <p>Bebidas refrescantes feitas com frutas selecionadas</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('lanches')">
+                        <span class="category-icon">🥙</span>
+                        <h3>Lanches Saudáveis</h3>
+                        <p>Opções práticas e nutritivas para qualquer hora</p>
                     </div>
                 </div>
-                <div class="about-image">
-                    <div class="image-placeholder">
-                        <span>💼</span>
-                        <p>Equipe especializada</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+            </section>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">O que nossos clientes dizem</h2>
-                <p class="section-subtitle">Depoimentos de quem confia no nosso trabalho</p>
-            </div>
-            <div class="testimonials-grid">
-                <% testimonials.forEach(testimonial => { %>
-                <div class="testimonial-card">
-                    <div class="testimonial-content">
-                        <div class="testimonial-stars">
-                            <% for(let i = 0; i < testimonial.rating; i++) { %>
-                                <span class="star">★</span>
-                            <% } %>
-                        </div>
-                        <p class="testimonial-message">"<%= testimonial.message %>"</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar"><%= testimonial.avatar %></div>
-                            <div class="author-info">
-                                <div class="author-name"><%= testimonial.name %></div>
-                                <div class="author-company"><%= testimonial.company %></div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Products -->
+            <section class="products" id="produtos">
+                <h2 class="section-title">Nosso Cardápio</h2>
+                
+                <div class="filter-bar">
+                    <button class="filter-btn active" onclick="filterProducts('todos')">Todos</button>
+                    <button class="filter-btn" onclick="filterProducts('saladas')">Saladas</button>
+                    <button class="filter-btn" onclick="filterProducts('bowls')">Bowls</button>
+                    <button class="filter-btn" onclick="filterProducts('sucos')">Sucos</button>
+                    <button class="filter-btn" onclick="filterProducts('lanches')">Lanches</button>
                 </div>
-                <% }); %>
-            </div>
-        </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Entre em Contato</h2>
-                <p class="section-subtitle">Vamos conversar sobre seu próximo projeto</p>
-            </div>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Fale Conosco</h3>
-                    <div class="contact-item">
-                        <span class="contact-icon">📧</span>
-                        <span>contato@techsolutions.com.br</span>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-icon">📱</span>
-                        <span>(11) 99999-9999</span>
-                    </div>
-                    <div class="contact-item">
-                        <span class="contact-icon">📍</span>
-                        <span>São Paulo, SP - Brasil</span>
-                    </div>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be populated by JavaScript -->
                 </div>
-                <form class="contact-form" id="contactForm">
+            </section>
+        </div>
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-modal-content">
+            <div class="auth-header">
+                <span class="auth-close" onclick="closeAuthModal()">&times;</span>
+                <h2 id="authTitle">Bem-vindo ao Vida no Prato</h2>
+                <p>Sua jornada saudável começa aqui 🌱</p>
+            </div>
+            
+            <div class="auth-body">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchTab('login')">Entrar</button>
+                    <button class="auth-tab" onclick="switchTab('register')">Cadastrar</button>
+                </div>
+
+                <!-- Login Form -->
+                <form class="auth-form active" id="loginForm">
                     <div class="form-group">
-                        <input type="text" name="name" placeholder="Seu nome" required>
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                        <span class="input-icon">📧</span>
                     </div>
+                    
                     <div class="form-group">
-                        <input type="email" name="email" placeholder="Seu e-mail" required>
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        <span class="password-toggle" onclick="togglePassword('loginPassword')">👁️</span>
                     </div>
-                    <div class="form-group">
-                        <textarea name="message" rows="5" placeholder="Sua mensagem" required></textarea>
+                    
+                    <button type="submit" class="auth-submit">
+                        Entrar na Conta
+                    </button>
+                    
+                    <div class="forgot-password">
+                        <a href="#" onclick="showForgotPassword()">Esqueci minha senha</a>
                     </div>
-                    <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
                 </form>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3><%= company.name %></h3>
-                    <p>Transformando ideias em soluções digitais desde <%= company.founded %>.</p>
+                <!-- Register Form -->
+                <form class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Nome Completo</label>
+                        <input type="text" id="registerName" placeholder="Seu nome completo" required>
+                        <span class="input-icon">👤</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail">E-mail</label>
+                        <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+                        <span class="input-icon">📧</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPhone">Telefone</label>
+                        <input type="tel" id="registerPhone" placeholder="(11) 99999-9999" required>
+                        <span class="input-icon">📱</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword">Senha</label>
+                        <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required>
+                        <span class="password-toggle" onclick="togglePassword('registerPassword')">👁️</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Senha</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirme sua senha" required>
+                        <span class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</span>
+                    </div>
+                    
+                    <button type="submit" class="auth-submit">
+                        Criar Conta
+                    </button>
+                </form>
+
+                <div class="social-login">
+                    <p>ou continue com</p>
+                    <div class="social-buttons">
+                        <button class="social-btn" onclick="socialLogin('google')">
+                            🔍 Google
+                        </button>
+                        <button class="social-btn" onclick="socialLogin('facebook')">
+                            📘 Facebook
+                        </button>
+                    </div>
                 </div>
-                <div class="footer-section">
-                    <h4>Links Rápidos</h4>
-                    <ul>
-                        <li><a href="/">Início</a></li>
-                        <li><a href="/services">Serviços</a></li>
-                        <li><a href="/about">Sobre</a></li>
-                        <li><a href="#contact">Contato</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Contato</h4>
-                    <p>contato@techsolutions.com.br</p>
-                    <p>(11) 99999-9999</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; <%= currentYear %> <%= company.name %>. Todos os direitos reservados.</p>
             </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- User Menu -->
+    <div class="user-menu" id="userMenu">
+        <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">
+            U
+        </div>
+        <div class="dropdown" id="userDropdown">
+            <a href="#" onclick="showProfile()">👤 Meu Perfil</a>
+            <a href="#" onclick="showOrders()">📦 Meus Pedidos</a>
+            <a href="#" onclick="showFavorites()">❤️ Favoritos</a>
+            <a href="#" onclick="logout()">🚪 Sair</a>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Meu Carrinho</h2>
+            <div class="cart-items" id="cartItems">
+                <p style="text-align: center; color: #666; padding: 20px;">Seu carrinho está vazio</p>
+            </div>
+            <div class="cart-total" id="cartTotal">Total: R$ 0,00</div>
+            <button class="checkout-btn" onclick="checkout()">
+                <span id="checkoutText">Finalizar Pedido</span>
+            </button>
+        </div>
+    </div>
 
     <script src="/js/script.js"></script>
 </body>

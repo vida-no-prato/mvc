@@ -1,325 +1,483 @@
-// JavaScript para funcionalidades da landing page
+// Product Data
+const products = [
+    {
+        id: 1,
+        name: "Salada Caesar Saudável",
+        description: "Alface crocante, croutons integrais, parmesão e molho caesar light",
+        price: 18.90,
+        category: "saladas",
+        emoji: "🥗"
+    },
+    {
+        id: 2,
+        name: "Bowl Proteico",
+        description: "Quinoa, frango grelhado, abacate, tomate cereja e molho tahine",
+        price: 24.90,
+        category: "bowls",
+        emoji: "🍲"
+    },
+    {
+        id: 3,
+        name: "Suco Verde Detox",
+        description: "Couve, maçã, limão, gengibre e água de coco",
+        price: 8.90,
+        category: "sucos",
+        emoji: "🥤"
+    },
+    {
+        id: 4,
+        name: "Wrap Vegano",
+        description: "Tortilla integral com húmus, vegetais frescos e brotos",
+        price: 16.90,
+        category: "lanches",
+        emoji: "🌯"
+    },
+    {
+        id: 5,
+        name: "Salada Arco-Íris",
+        description: "Mix de folhas, cenoura, beterraba, pepino e vinagrete de ervas",
+        price: 16.90,
+        category: "saladas",
+        emoji: "🌈"
+    },
+    {
+        id: 6,
+        name: "Bowl Buddha",
+        description: "Batata doce assada, grão de bico, espinafre e molho de amendoim",
+        price: 22.90,
+        category: "bowls",
+        emoji: "🥣"
+    },
+    {
+        id: 7,
+        name: "Smoothie Tropical",
+        description: "Manga, abacaxi, coco e sementes de chia",
+        price: 12.90,
+        category: "sucos",
+        emoji: "🥭"
+    },
+    {
+        id: 8,
+        name: "Sanduíche Natural",
+        description: "Pão integral, peito de peru, queijo branco, alface e tomate",
+        price: 14.90,
+        category: "lanches",
+        emoji: "🥪"
+    }
+];
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Mobile Navigation Toggle
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
+// Global variables
+let cart = [];
+let currentFilter = 'todos';
+let currentUser = null;
+
+// Auth functionality
+function openAuthModal() {
+    document.getElementById('authModal').style.display = 'block';
+}
+
+function closeAuthModal() {
+    document.getElementById('authModal').style.display = 'none';
+}
+
+function switchTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    event.target.classList.add('active');
+
+    // Update forms
+    document.querySelectorAll('.auth-form').forEach(form => {
+        form.classList.remove('active');
+    });
+
+    if (tabName === 'login') {
+        document.getElementById('loginForm').classList.add('active');
+        document.getElementById('authTitle').textContent = 'Bem-vindo de volta!';
+    } else {
+        document.getElementById('registerForm').classList.add('active');
+        document.getElementById('authTitle').textContent = 'Crie sua conta';
+    }
+}
+
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const toggle = input.nextElementSibling;
     
-    if (navToggle && navMenu) {
-        navToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-            
-            // Animação do hambúrguer
-            const bars = navToggle.querySelectorAll('.bar');
-            bars.forEach((bar, index) => {
-                if (navMenu.classList.contains('active')) {
-                    if (index === 0) bar.style.transform = 'rotate(45deg) translate(5px, 5px)';
-                    if (index === 1) bar.style.opacity = '0';
-                    if (index === 2) bar.style.transform = 'rotate(-45deg) translate(7px, -6px)';
-                } else {
-                    bar.style.transform = 'none';
-                    bar.style.opacity = '1';
-                }
-            });
-        });
+    if (input.type === 'password') {
+        input.type = 'text';
+        toggle.textContent = '🙈';
+    } else {
+        input.type = 'password';
+        toggle.textContent = '👁️';
     }
+}
 
-    // Fechar menu mobile ao clicar em um link
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (navMenu && navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                const bars = navToggle.querySelectorAll('.bar');
-                bars.forEach(bar => {
-                    bar.style.transform = 'none';
-                    bar.style.opacity = '1';
-                });
-            }
-        });
-    });
+function showForgotPassword() {
+    alert('📧 Um link de recuperação foi enviado para seu e-mail!\n\n(Esta é uma simulação - em um app real, um e-mail seria enviado)');
+}
 
-    // Smooth scrolling para links internos
-    const internalLinks = document.querySelectorAll('a[href^="#"]');
-    internalLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = targetSection.offsetTop - headerHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Header background change on scroll
-    const header = document.querySelector('.header');
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 100) {
-            header.style.background = 'rgba(255, 255, 255, 0.98)';
-            header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.15)';
-        } else {
-            header.style.background = 'rgba(255, 255, 255, 0.95)';
-            header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-        }
-    });
-
-    // Formulário de contato
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                message: formData.get('message')
-            };
-
-            // Validação básica
-            if (!data.name.trim() || !data.email.trim() || !data.message.trim()) {
-                showNotification('Por favor, preencha todos os campos.', 'error');
-                return;
-            }
-
-            if (!isValidEmail(data.email)) {
-                showNotification('Por favor, insira um e-mail válido.', 'error');
-                return;
-            }
-
-            // Simular envio (em produção, enviar para o servidor)
-            const submitButton = this.querySelector('button[type="submit"]');
-            const originalText = submitButton.textContent;
-            submitButton.textContent = 'Enviando...';
-            submitButton.disabled = true;
-
-            try {
-                // Simular delay de envio
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Simular sucesso
-                showNotification('Mensagem enviada com sucesso! Entraremos em contato em breve.', 'success');
-                this.reset();
-            } catch (error) {
-                showNotification('Erro ao enviar mensagem. Tente novamente.', 'error');
-            } finally {
-                submitButton.textContent = originalText;
-                submitButton.disabled = false;
-            }
-        });
-    }
-
-    // Animações de entrada quando elementos ficam visíveis
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+function socialLogin(provider) {
+    const providerNames = {
+        google: 'Google',
+        facebook: 'Facebook'
     };
-
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-up');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observar elementos para animação
-    const animatedElements = document.querySelectorAll('.service-card, .testimonial-card, .stat-item');
-    animatedElements.forEach(el => observer.observe(el));
-
-    // Contador animado para estatísticas
-    function animateCounters() {
-        const counters = document.querySelectorAll('.stat-number');
-        counters.forEach(counter => {
-            const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
-            const increment = target / 50;
-            let current = 0;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    counter.textContent = counter.textContent.replace(/\d+/, target);
-                    clearInterval(timer);
-                } else {
-                    counter.textContent = counter.textContent.replace(/\d+/, Math.floor(current));
-                }
-            }, 40);
-        });
-    }
-
-    // Observar seção de estatísticas para iniciar animação
-    const statsSection = document.querySelector('.hero-stats');
-    if (statsSection) {
-        const statsObserver = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounters();
-                    statsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
+    
+    // Simulate social login
+    setTimeout(() => {
+        const userData = {
+            name: 'Usuário ' + providerNames[provider],
+            email: 'usuario@' + provider + '.com',
+            avatar: providerNames[provider][0]
+        };
         
-        statsObserver.observe(statsSection);
-    }
+        loginUser(userData);
+        alert(`✅ Login realizado com sucesso via ${providerNames[provider]}!`);
+        closeAuthModal();
+    }, 1500);
+}
 
-    // Efeito parallax suave no hero
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const parallax = scrolled * 0.5;
-            hero.style.transform = `translateY(${parallax}px)`;
-        });
-    }
+function loginUser(userData) {
+    currentUser = userData;
+    
+    // Hide login button and show user menu
+    document.querySelector('.login-btn').style.display = 'none';
+    const userMenu = document.getElementById('userMenu');
+    userMenu.style.display = 'block';
+    
+    // Update user avatar
+    const avatar = document.getElementById('userAvatar');
+    avatar.textContent = userData.name[0].toUpperCase();
+    avatar.title = userData.name;
+}
 
-    // Função para mostrar notificações
-    function showNotification(message, type = 'info') {
-        // Remover notificação existente
-        const existingNotification = document.querySelector('.notification');
-        if (existingNotification) {
-            existingNotification.remove();
-        }
+function logout() {
+    currentUser = null;
+    
+    // Show login button and hide user menu
+    document.querySelector('.login-btn').style.display = 'block';
+    document.getElementById('userMenu').style.display = 'none';
+    document.getElementById('userDropdown').style.display = 'none';
+    
+    alert('👋 Você foi desconectado com sucesso!');
+}
 
-        // Criar nova notificação
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <div class="notification-content">
-                <span class="notification-icon">${getNotificationIcon(type)}</span>
-                <span class="notification-message">${message}</span>
-                <button class="notification-close">&times;</button>
+function toggleDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+function showProfile() {
+    alert('👤 Funcionalidade "Meu Perfil" em desenvolvimento!');
+    document.getElementById('userDropdown').style.display = 'none';
+}
+
+function showOrders() {
+    alert('📦 Funcionalidade "Meus Pedidos" em desenvolvimento!');
+    document.getElementById('userDropdown').style.display = 'none';
+}
+
+function showFavorites() {
+    alert('❤️ Funcionalidade "Favoritos" em desenvolvimento!');
+    document.getElementById('userDropdown').style.display = 'none';
+}
+
+// Display products
+function displayProducts(productsToShow) {
+    const productsGrid = document.getElementById('productsGrid');
+    productsGrid.innerHTML = '';
+
+    productsToShow.forEach((product, index) => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        productCard.style.animationDelay = `${index * 0.1}s`;
+        
+        productCard.innerHTML = `
+            <div class="product-image">
+                ${product.emoji}
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">${product.name}</h3>
+                <p class="product-description">${product.description}</p>
+                <div class="product-footer">
+                    <span class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                    <button class="add-to-cart" onclick="addToCart(${product.id})">
+                        Adicionar
+                    </button>
+                </div>
             </div>
         `;
-
-        // Estilos da notificação
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            max-width: 400px;
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-            color: white;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        `;
-
-        notification.querySelector('.notification-content').style.cssText = `
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        `;
-
-        notification.querySelector('.notification-close').style.cssText = `
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            margin-left: auto;
-        `;
-
-        document.body.appendChild(notification);
-
-        // Animar entrada
+        
+        productsGrid.appendChild(productCard);
+        
+        // Add entrance animation
         setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
+            productCard.style.animation = 'slideInUp 0.6s ease forwards';
+        }, index * 100);
+    });
+}
 
-        // Fechar ao clicar no X
-        notification.querySelector('.notification-close').addEventListener('click', () => {
-            closeNotification(notification);
+// Filter products
+function filterProducts(category) {
+    currentFilter = category;
+    
+    // Update filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+
+    // Filter and display products
+    const filteredProducts = category === 'todos' 
+        ? products 
+        : products.filter(product => product.category === category);
+    
+    displayProducts(filteredProducts);
+}
+
+// Add to cart
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    const existingItem = cart.find(item => item.id === productId);
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            ...product,
+            quantity: 1
+        });
+    }
+
+    updateCartCount();
+    
+    // Visual feedback
+    event.target.innerHTML = '<div class="loading"></div>';
+    setTimeout(() => {
+        event.target.innerHTML = 'Adicionado!';
+        event.target.style.background = '#4caf50';
+        setTimeout(() => {
+            event.target.innerHTML = 'Adicionar';
+            event.target.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+        }, 1000);
+    }, 500);
+}
+
+// Update cart count
+function updateCartCount() {
+    const count = cart.reduce((total, item) => total + item.quantity, 0);
+    document.getElementById('cartCount').textContent = count;
+    
+    if (count > 0) {
+        document.getElementById('cartCount').style.display = 'flex';
+    } else {
+        document.getElementById('cartCount').style.display = 'none';
+    }
+}
+
+// Open cart modal
+function openCart() {
+    const modal = document.getElementById('cartModal');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+
+    // Display cart items
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Seu carrinho está vazio</p>';
+        cartTotal.textContent = 'Total: R$ 0,00';
+    } else {
+        cartItems.innerHTML = '';
+        let total = 0;
+
+        cart.forEach(item => {
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item';
+            cartItem.innerHTML = `
+                <div>
+                    <strong>${item.name}</strong><br>
+                    <small>Quantidade: ${item.quantity}</small>
+                </div>
+                <div>
+                    <strong>R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</strong>
+                </div>
+            `;
+            cartItems.appendChild(cartItem);
+            total += item.price * item.quantity;
         });
 
-        // Auto fechar após 5 segundos
-        setTimeout(() => {
-            if (document.body.contains(notification)) {
-                closeNotification(notification);
-            }
-        }, 5000);
+        cartTotal.textContent = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
-    function closeNotification(notification) {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (document.body.contains(notification)) {
-                notification.remove();
-            }
-        }, 300);
+    modal.style.display = 'block';
+}
+
+// Close cart modal
+function closeCart() {
+    document.getElementById('cartModal').style.display = 'none';
+}
+
+// Checkout
+function checkout() {
+    if (cart.length === 0) {
+        alert('Seu carrinho está vazio!');
+        return;
     }
 
-    function getNotificationIcon(type) {
-        switch (type) {
-            case 'success': return '✅';
-            case 'error': return '❌';
-            default: return 'ℹ️';
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    const checkoutText = document.getElementById('checkoutText');
+    
+    checkoutText.innerHTML = '<div class="loading"></div> Processando...';
+    checkoutBtn.disabled = true;
+
+    setTimeout(() => {
+        alert('Pedido realizado com sucesso! 🎉\n\nSeu pedido chegará em aproximadamente 30-45 minutos.');
+        cart = [];
+        updateCartCount();
+        closeCart();
+        
+        checkoutText.textContent = 'Finalizar Pedido';
+        checkoutBtn.disabled = false;
+    }, 2000);
+}
+
+// Form submissions
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize page
+    displayProducts(products);
+    updateCartCount();
+
+    // Login form submission
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        if (!email || !password) {
+            alert('❌ Por favor, preencha todos os campos!');
+            return;
         }
-    }
-
-    // Validação de email
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-
-    // Efeito de typing no título principal
-    function typeWriter(element, text, speed = 50) {
-        let i = 0;
-        element.textContent = '';
         
-        function type() {
-            if (i < text.length) {
-                element.textContent += text.charAt(i);
-                i++;
-                setTimeout(type, speed);
-            }
-        }
+        // Simulate login process
+        const submitBtn = this.querySelector('.auth-submit');
+        const originalText = submitBtn.textContent;
+        submitBtn.innerHTML = '<div class="loading"></div> Entrando...';
+        submitBtn.disabled = true;
         
-        type();
-    }
-
-    // Aplicar efeito de typing ao título do hero (opcional)
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const originalText = heroTitle.textContent;
-        // Comentado para não interferir com o carregamento inicial
-        // typeWriter(heroTitle, originalText, 100);
-    }
-
-    // Loading state para botões
-    function addLoadingState(button, loadingText = 'Carregando...') {
-        const originalText = button.textContent;
-        button.textContent = loadingText;
-        button.disabled = true;
-        button.style.opacity = '0.7';
-        
-        return function restore() {
-            button.textContent = originalText;
-            button.disabled = false;
-            button.style.opacity = '1';
-        };
-    }
-
-    // Adicionar eventos aos botões de "Saiba Mais"
-    const saibaMaisButtons = document.querySelectorAll('.service-card .btn-outline');
-    saibaMaisButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            showNotification('Funcionalidade em desenvolvimento. Entre em contato para mais informações!', 'info');
-        });
+        setTimeout(() => {
+            const userData = {
+                name: email.split('@')[0],
+                email: email,
+                avatar: email[0].toUpperCase()
+            };
+            
+            loginUser(userData);
+            alert('✅ Login realizado com sucesso!');
+            closeAuthModal();
+            
+            // Reset form
+            this.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
     });
 
-    console.log('Landing page carregada com sucesso! 🚀');
+    // Register form submission
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const phone = document.getElementById('registerPhone').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (!name || !email || !phone || !password || !confirmPassword) {
+            alert('❌ Por favor, preencha todos os campos!');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            alert('❌ As senhas não coincidem!');
+            return;
+        }
+        
+        if (password.length < 6) {
+            alert('❌ A senha deve ter pelo menos 6 caracteres!');
+            return;
+        }
+        
+        // Simulate registration process
+        const submitBtn = this.querySelector('.auth-submit');
+        const originalText = submitBtn.textContent;
+        submitBtn.innerHTML = '<div class="loading"></div> Criando conta...';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            const userData = {
+                name: name,
+                email: email,
+                phone: phone,
+                avatar: name[0].toUpperCase()
+            };
+            
+            loginUser(userData);
+            alert('🎉 Conta criada com sucesso!\nBem-vindo ao GreenEats!');
+            closeAuthModal();
+            
+            // Reset form
+            this.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }, 2500);
+    });
+});
+
+// Close modals when clicking outside
+window.addEventListener('click', function(event) {
+    const cartModal = document.getElementById('cartModal');
+    const authModal = document.getElementById('authModal');
+    const userDropdown = document.getElementById('userDropdown');
+    
+    if (event.target === cartModal) {
+        closeCart();
+    }
+    
+    if (event.target === authModal) {
+        closeAuthModal();
+    }
+    
+    // Close user dropdown when clicking outside
+    if (!event.target.closest('.user-menu')) {
+        userDropdown.style.display = 'none';
+    }
+});
+
+// Header scroll effect
+window.addEventListener('scroll', function() {
+    const header = document.querySelector('.header');
+    if (window.scrollY > 100) {
+        header.style.background = 'rgba(255, 255, 255, 0.98)';
+        header.style.boxShadow = '0 2px 30px rgba(46, 125, 50, 0.15)';
+    } else {
+        header.style.background = 'rgba(255, 255, 255, 0.95)';
+        header.style.boxShadow = '0 2px 20px rgba(46, 125, 50, 0.1)';
+    }
+});
+
+// Smooth scrolling for navigation links
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
 });

@@ -13,29 +13,29 @@ const companyInfo = {
 };
 
 // Serviços oferecidos
-const services = [
+const categories = [
   {
     id: 1,
-    title: "Desenvolvimento Web",
+    title: "Saladas",
     description:
-      "Criamos websites modernos e responsivos usando as melhores tecnologias do mercado.",
-    icon: "💻",
-    price: "A partir de R$ 2.500",
+      "Saladas frescas e variadas, preparadas com ingredientes selecionados.",
+    icon: "🥗",
+    price: "A partir de R$ 25",
   },
   {
     id: 2,
-    title: "Aplicativos Mobile",
-    description: "Desenvolvemos apps nativos e híbridos para iOS e Android.",
-    icon: "📱",
-    price: "A partir de R$ 5.000",
+    title: "Bowls",
+    description: "Bowls nutritivos e completos para todas as refeições.",
+    icon: "🍲",
+    price: "A partir de R$ 30",
   },
   {
     id: 3,
-    title: "Consultoria em TI",
+    title: "Snacks Saudáveis",
     description:
-      "Oferecemos consultoria especializada para otimizar seus processos tecnológicos.",
-    icon: "🔧",
-    price: "R$ 200/hora",
+      "Snacks práticos e saudáveis para o seu dia a dia.",
+    icon: "🍎",
+    price: "A partir de R$ 10",
   },
 ];
 
@@ -84,11 +84,11 @@ class DataModel {
     return companyInfo;
   }
 
-  getServices() {
-    return services;
+  getCategories() {
+    return categories;
   }
 
-  getServiceById(id) {
+  getCategoriesById(id) {
     return services.find((service) => service.id === parseInt(id));
   }
 
@@ -104,7 +104,7 @@ class DataModel {
   getLandingPageData() {
     return {
       company: this.getCompanyInfo(),
-      services: this.getServices(),
+      services: this.getCategories(),
       testimonials: this.getTestimonials(),
       stats: this.getStats(),
     };

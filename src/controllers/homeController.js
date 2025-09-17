@@ -47,17 +47,17 @@ class HomeController {
     }
 
     // Método para página de serviços (caso queira expandir)
-    services(req, res) {
+    categories(req, res) {
         try {
-            const services = dataModel.getServices();
+            const categories = dataModel.getCategories();
             
-            res.render('services', {
-                title: 'Nossos Serviços - TechSolutions',
-                services: services,
+            res.render('categories', {
+                title: 'Categorias - Vida no Prato',
+                categories: categories,
                 currentYear: new Date().getFullYear()
             });
         } catch (error) {
-            console.error('Erro ao carregar página de serviços:', error);
+            console.error('Erro ao carregar página de categorias:', error);
             res.status(500).render('error', {
                 title: 'Erro Interno',
                 message: 'Ocorreu um erro interno. Tente novamente mais tarde.'
