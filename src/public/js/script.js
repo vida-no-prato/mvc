@@ -6,7 +6,8 @@ const products = [
         description: "Alface crocante, croutons integrais, parmesão e molho caesar light",
         price: 18.90,
         category: "saladas",
-        emoji: "🥗"
+        image: "/images/Salada_Caesar_Saudavel.jpg",
+        
     },
     {
         id: 2,
@@ -14,6 +15,7 @@ const products = [
         description: "Quinoa, frango grelhado, abacate, tomate cereja e molho tahine",
         price: 24.90,
         category: "bowls",
+        image: "./images/Bowl_Proteico.jpg",
         emoji: "🍲"
     },
     {
@@ -22,6 +24,7 @@ const products = [
         description: "Couve, maçã, limão, gengibre e água de coco",
         price: 8.90,
         category: "sucos",
+        image: "./images/Suco_Verde_Detox.jpg",
         emoji: "🥤"
     },
     {
@@ -30,6 +33,7 @@ const products = [
         description: "Tortilla integral com húmus, vegetais frescos e brotos",
         price: 16.90,
         category: "lanches",
+        image: "./images/Wrap_Vegano.jpg",
         emoji: "🌯"
     },
     {
@@ -38,6 +42,7 @@ const products = [
         description: "Mix de folhas, cenoura, beterraba, pepino e vinagrete de ervas",
         price: 16.90,
         category: "saladas",
+        image: "./images/Salada_Arco-Iris.jpg",
         emoji: "🌈"
     },
     {
@@ -46,6 +51,7 @@ const products = [
         description: "Batata doce assada, grão de bico, espinafre e molho de amendoim",
         price: 22.90,
         category: "bowls",
+        image: "./images/Bowl_Buddha.jpg",
         emoji: "🥣"
     },
     {
@@ -54,6 +60,7 @@ const products = [
         description: "Manga, abacaxi, coco e sementes de chia",
         price: 12.90,
         category: "sucos",
+        image: "./images/Smoothie_Tropical.jpg",
         emoji: "🥭"
     },
     {
@@ -62,6 +69,7 @@ const products = [
         description: "Pão integral, peito de peru, queijo branco, alface e tomate",
         price: 14.90,
         category: "lanches",
+        image: "./images/Sanduiche_Natural.jpg",
         emoji: "🥪"
     }
 ];
@@ -194,9 +202,7 @@ function displayProducts(productsToShow) {
         productCard.style.animationDelay = `${index * 0.1}s`;
         
         productCard.innerHTML = `
-            <div class="product-image">
-                ${product.emoji}
-            </div>
+            <img class="product-image" src="${product.image}" alt="${product.name}"/>
             <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
                 <p class="product-description">${product.description}</p>
@@ -423,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             loginUser(userData);
-            alert('🎉 Conta criada com sucesso!\nBem-vindo ao GreenEats!');
+            alert('🎉 Conta criada com sucesso!\nBem-vindo ao Vida no Prato!');
             closeAuthModal();
             
             // Reset form
