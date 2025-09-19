@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { criarUsuario, buscarPorEmail } = require('../models/userModel');
-const bcrypt = require('bcryptjs');
+const { register, login } = require('../controllers/authController');
+
+router.post('/register', register);
+router.post('/login', login);
+
+module.exports = router;
 
 router.post('/register', async (req, res) => {
   const { nome, email, senha } = req.body;

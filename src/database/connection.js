@@ -2,10 +2,10 @@ const mysql = require('mysql2/promise');
 
 async function connect() {
   const connection = await mysql.createConnection({
-    host: 'localhost', // endereço do MySQL
-    user: 'root', // usuário do MySQL
-    password: 'sua_senha', // senha do MySQL
-    database: 'mvc_db' // nome do banco
+    host: 'localhost',
+    user: 'root',
+    password: 'sua_senha',
+    database: 'mvc_db'
   });
   return connection;
 }
