@@ -257,17 +257,22 @@ function addToCart(productId) {
     }
 
     updateCartCount();
-    
-    // Visual feedback
-    event.target.innerHTML = '<div class="loading"></div>';
+
+    // Visual feedback com intervalos claros
+    const btn = event.target;
+    btn.innerHTML = '<div class="loading"></div>';
+    btn.disabled = true;
+
     setTimeout(() => {
-        event.target.innerHTML = 'Adicionado!';
-        event.target.style.background = '#4caf50';
+        btn.innerHTML = 'Adicionado!';
+        btn.style.background = '#4caf50';
+
         setTimeout(() => {
-            event.target.innerHTML = 'Adicionar';
-            event.target.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+            btn.innerHTML = 'Adicionar';
+            btn.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+            btn.disabled = false;
         }, 1000);
-    }, 500);
+    }, 700); // loader visível por 700ms
 }
 
 // Update cart count
