@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/vida-no-prato.css">
+<body>
+   <section class="categories" id="categorias">
+                <h2 class="section-title">Nossas Especialidades</h2>
+                <div class="category-grid">
+                    <div class="category-card" onclick="filterProducts('saladas')">
+                        <span class="category-icon">🥗</span>
+                        <h3>Saladas Frescas</h3>
+                        <p>Combinações criativas com ingredientes orgânicos e molhos especiais</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('bowls')">
+                        <span class="category-icon">🍲</span>
+                        <h3>Bowls Nutritivos</h3>
+                        <p>Refeições completas e balanceadas em uma tigela</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('sucos')">
+                        <span class="category-icon">🥤</span>
+                        <h3>Sucos Naturais</h3>
+                        <p>Bebidas refrescantes feitas com frutas selecionadas</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('lanches')">
+                        <span class="category-icon">🥙</span>
+                        <h3>Lanches Saudáveis</h3>
+                        <p>Opções práticas e nutritivas para qualquer hora</p>
+                    </div>
+                </div>
+            </section>
+    <script src="/js/script.js"></script>
+</body>
+</html>

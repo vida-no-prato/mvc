@@ -3,258 +3,411 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Sobre Nós - Vida no Prato</title>
+    <link rel="stylesheet" href="/css/about.css">
 </head>
 <body>
-    <!-- Header/Navigation -->
+    <!-- Header -->
     <header class="header">
-        <nav class="nav">
-            <div class="nav-container">
-                <div class="nav-logo">
-                    <h2><%= company.name %></h2>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="/" class="nav-link">Início</a></li>
-                    <li><a href="/services" class="nav-link">Serviços</a></li>
-                    <li><a href="/about" class="nav-link active">Sobre</a></li>
-                    <li><a href="/#testimonials" class="nav-link">Depoimentos</a></li>
-                    <li><a href="/#contact" class="nav-link">Contato</a></li>
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">Vida no Prato</div>
+                <ul class="nav-links">
+                    <li><a href="/">Início</a></li>
+                    <li><a href="/categories">Categorias</a></li>
+                    <li><a href="/">Cardápio</a></li>
+                    <li><a href="#sobre" class="active">Sobre</a></li>
                 </ul>
-                <div class="nav-toggle">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+                <div class="nav-actions">
+                    <button class="login-btn">👤 Entrar</button>
+                    <button class="cart-btn">
+                        🛒 Carrinho
+                        <span class="cart-count">0</span>
+                    </button>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
     </header>
 
-    <!-- Hero Section About -->
-    <section class="hero hero-about">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title">Sobre a <%= company.name %></h1>
-                <p class="hero-description">Conheça nossa história, missão e os valores que nos guiam na criação de soluções tecnológicas inovadoras.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Company Story -->
-    <section class="company-story">
-        <div class="container">
-            <div class="story-content">
-                <div class="story-text">
-                    <h2 class="section-title">Nossa História</h2>
-                    <p class="story-paragraph">
-                        Fundada em <%= company.founded %>, a <%= company.name %> nasceu do sonho de transformar ideias em realidade digital. 
-                        Começamos como uma pequena startup com a missão de democratizar o acesso à tecnologia e ajudar empresas 
-                        de todos os tamanhos a prosperarem no mundo digital.
-                    </p>
-                    <p class="story-paragraph">
-                        Ao longo dos anos, crescemos organicamente, sempre mantendo nossos valores fundamentais: 
-                        excelência técnica, inovação constante e relacionamento próximo com nossos clientes. 
-                        Hoje, somos uma equipe de mais de <%= company.employees %> profissionais especializados, 
-                        e já entregamos mais de <%= company.projects %> projetos bem-sucedidos.
-                    </p>
-                    <p class="story-paragraph">
-                        Nossa jornada é marcada por parcerias duradouras, crescimento sustentável e um compromisso 
-                        inabalável com a qualidade. Cada projeto é uma oportunidade de superarmos expectativas e 
-                        criarmos soluções que realmente fazem a diferença na vida das pessoas e no sucesso dos negócios.
-                    </p>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-about">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Nossa História</h1>
+                    <p>Transformando a alimentação saudável em uma experiência deliciosa e acessível</p>
                 </div>
-                <div class="story-image">
-                    <div class="image-placeholder">
-                        <span>🏢</span>
-                        <p>Nossa sede</p>
+                <div class="hero-image">
+                    <div class="floating-element">🌱</div>
+                    <div class="floating-element">🥗</div>
+                    <div class="floating-element">🍃</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Missão, Visão e Valores -->
+        <section class="mission-section">
+            <div class="container">
+                <div class="mission-grid">
+                    <div class="mission-card">
+                        <div class="mission-icon">🎯</div>
+                        <h3>Nossa Missão</h3>
+                        <p>Democratizar o acesso à alimentação saudável, oferecendo refeições nutritivas, saborosas e sustentáveis que promovem o bem-estar de nossos clientes e do planeta.</p>
+                    </div>
+                    <div class="mission-card">
+                        <div class="mission-icon">👁️</div>
+                        <h3>Nossa Visão</h3>
+                        <p>Ser referência em alimentação saudável no Brasil, inspirando uma geração mais consciente sobre nutrição e sustentabilidade alimentar.</p>
+                    </div>
+                    <div class="mission-card">
+                        <div class="mission-icon">💚</div>
+                        <h3>Nossos Valores</h3>
+                        <ul>
+                            <li>Qualidade e frescor</li>
+                            <li>Sustentabilidade ambiental</li>
+                            <li>Transparência nos ingredientes</li>
+                            <li>Inovação culinária</li>
+                            <li>Compromisso com a saúde</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Mission Vision Values -->
-    <section class="mvv-section">
-        <div class="container">
-            <div class="mvv-grid">
-                <div class="mvv-card">
-                    <div class="mvv-icon">🎯</div>
-                    <h3 class="mvv-title">Missão</h3>
-                    <p class="mvv-description">
-                        Transformar ideias em soluções digitais inovadoras, capacitando empresas a alcançarem 
-                        seu máximo potencial através da tecnologia, sempre com foco na excelência e no 
-                        relacionamento próximo com nossos clientes.
-                    </p>
-                </div>
-                <div class="mvv-card">
-                    <div class="mvv-icon">👁️</div>
-                    <h3 class="mvv-title">Visão</h3>
-                    <p class="mvv-description">
-                        Ser reconhecida como a principal referência em soluções tecnológicas no Brasil, 
-                        conhecida pela inovação, qualidade técnica e capacidade de transformar desafios 
-                        complexos em oportunidades de crescimento.
-                    </p>
-                </div>
-                <div class="mvv-card">
-                    <div class="mvv-icon">💎</div>
-                    <h3 class="mvv-title">Valores</h3>
-                    <ul class="values-list">
-                        <li>Excelência técnica em tudo que fazemos</li>
-                        <li>Inovação constante e criatividade</li>
-                        <li>Transparência e honestidade</li>
-                        <li>Compromisso com prazos e qualidade</li>
-                        <li>Crescimento sustentável e responsável</li>
-                        <li>Relacionamento próximo com clientes</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Team Section -->
-    <section class="team-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Nossa Equipe</h2>
-                <p class="section-subtitle">Profissionais especializados unidos pela paixão em tecnologia</p>
-            </div>
-            <div class="team-grid">
-                <div class="team-member">
-                    <div class="member-avatar">🧑‍💻</div>
-                    <h4 class="member-name">Equipe de Desenvolvimento</h4>
-                    <p class="member-role">Full-Stack Developers</p>
-                    <p class="member-description">Especialistas em tecnologias modernas como React, Node.js, Python e muito mais.</p>
-                </div>
-                <div class="team-member">
-                    <div class="member-avatar">🎨</div>
-                    <h4 class="member-name">Equipe de Design</h4>
-                    <p class="member-role">UI/UX Designers</p>
-                    <p class="member-description">Criadores de experiências digitais únicas, focados em usabilidade e estética.</p>
-                </div>
-                <div class="team-member">
-                    <div class="member-avatar">📊</div>
-                    <h4 class="member-name">Equipe de Gestão</h4>
-                    <p class="member-role">Project Managers</p>
-                    <p class="member-description">Garantem que cada projeto seja entregue no prazo e com a qualidade esperada.</p>
-                </div>
-                <div class="team-member">
-                    <div class="member-avatar">🔧</div>
-                    <h4 class="member-name">Equipe DevOps</h4>
-                    <p class="member-role">Infrastructure Specialists</p>
-                    <p class="member-description">Especialistas em infraestrutura, deploy e otimização de performance.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Technology Stack -->
-    <section class="tech-stack">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Tecnologias que Dominamos</h2>
-                <p class="section-subtitle">Sempre atualizados com as melhores ferramentas do mercado</p>
-            </div>
-            <div class="tech-categories">
-                <div class="tech-category">
-                    <h4 class="tech-category-title">Frontend</h4>
-                    <div class="tech-items">
-                        <span class="tech-item">React</span>
-                        <span class="tech-item">Vue.js</span>
-                        <span class="tech-item">Angular</span>
-                        <span class="tech-item">TypeScript</span>
-                        <span class="tech-item">JavaScript</span>
-                        <span class="tech-item">HTML5</span>
-                        <span class="tech-item">CSS3</span>
-                        <span class="tech-item">Sass</span>
+        <!-- Nossa História -->
+        <section class="story-section">
+            <div class="container">
+                <div class="story-content">
+                    <div class="story-text">
+                        <h2>Como Tudo Começou</h2>
+                        <div class="story-timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date">2020</div>
+                                <div class="timeline-content">
+                                    <h4>A Ideia Nasceu</h4>
+                                    <p>Durante a pandemia, percebemos a dificuldade das pessoas em manter uma alimentação saudável em casa. Foi então que Maria e João decidiram criar o Vida no Prato.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2021</div>
+                                <div class="timeline-content">
+                                    <h4>Primeira Cozinha</h4>
+                                    <p>Abriu nossa primeira cozinha artesanal em São Paulo, focando em ingredientes orgânicos e receitas desenvolvidas por nutricionistas.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2022</div>
+                                <div class="timeline-content">
+                                    <h4>Expansão Digital</h4>
+                                    <p>Lançamos nossa plataforma online e começamos as entregas em toda a Grande São Paulo, alcançando milhares de clientes satisfeitos.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2023</div>
+                                <div class="timeline-content">
+                                    <h4>Certificação Orgânica</h4>
+                                    <p>Obtivemos a certificação orgânica e estabelecemos parcerias com produtores locais, garantindo a origem sustentável dos nossos ingredientes.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">2024</div>
+                                <div class="timeline-content">
+                                    <h4>Presente</h4>
+                                    <p>Hoje somos uma das principais empresas de alimentação saudável de São Paulo, com mais de 50 mil clientes ativos e 100% de avaliações positivas.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="tech-category">
-                    <h4 class="tech-category-title">Backend</h4>
-                    <div class="tech-items">
-                        <span class="tech-item">Node.js</span>
-                        <span class="tech-item">Python</span>
-                        <span class="tech-item">Express</span>
-                        <span class="tech-item">Django</span>
-                        <span class="tech-item">FastAPI</span>
-                        <span class="tech-item">PHP</span>
-                        <span class="tech-item">Laravel</span>
-                        <span class="tech-item">Java</span>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h4 class="tech-category-title">Database</h4>
-                    <div class="tech-items">
-                        <span class="tech-item">MySQL</span>
-                        <span class="tech-item">PostgreSQL</span>
-                        <span class="tech-item">MongoDB</span>
-                        <span class="tech-item">Redis</span>
-                        <span class="tech-item">SQLite</span>
-                        <span class="tech-item">Firebase</span>
-                    </div>
-                </div>
-                <div class="tech-category">
-                    <h4 class="tech-category-title">DevOps & Cloud</h4>
-                    <div class="tech-items">
-                        <span class="tech-item">AWS</span>
-                        <span class="tech-item">Google Cloud</span>
-                        <span class="tech-item">Docker</span>
-                        <span class="tech-item">Kubernetes</span>
-                        <span class="tech-item">CI/CD</span>
-                        <span class="tech-item">Git</span>
+                    <div class="story-image">
+                        <div class="image-placeholder">
+                            <div class="image-icon">📸</div>
+                            <p>Foto da nossa primeira cozinha</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Call to Action -->
-    <section class="cta-section">
-        <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title">Pronto para começar seu próximo projeto?</h2>
-                <p class="cta-description">
-                    Entre em contato conosco e descubra como podemos ajudar sua empresa a crescer com soluções tecnológicas inovadoras.
-                </p>
-                <div class="cta-buttons">
-                    <a href="/#contact" class="btn btn-primary">Fale Conosco</a>
-                    <a href="/services" class="btn btn-secondary">Ver Serviços</a>
+        <!-- Equipe -->
+        <section class="team-section">
+            <div class="container">
+                <h2 class="section-title">Conheça Nossa Equipe</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-photo">👩‍🍳</div>
+                        <h4>Maria Silva</h4>
+                        <span class="member-role">Co-fundadora & Chef Executiva</span>
+                        <p>Nutricionista formada pela USP com 15 anos de experiência em culinária saudável. Especialista em alimentação funcional.</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link">📧</a>
+                            <a href="#" class="social-link">📱</a>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-photo">👨‍💼</div>
+                        <h4>João Santos</h4>
+                        <span class="member-role">Co-fundador & CEO</span>
+                        <p>Engenheiro de alimentos e empreendedor serial. Apaixonado por inovação e sustentabilidade no setor alimentício.</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link">📧</a>
+                            <a href="#" class="social-link">📱</a>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-photo">👩‍🔬</div>
+                        <h4>Ana Costa</h4>
+                        <span class="member-role">Nutricionista Chefe</span>
+                        <p>Doutora em Nutrição pela UNIFESP. Responsável pelo desenvolvimento nutricional de todos os nossos pratos e cardápios.</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link">📧</a>
+                            <a href="#" class="social-link">📱</a>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-photo">👨‍🚚</div>
+                        <h4>Carlos Lima</h4>
+                        <span class="member-role">Gerente de Logística</span>
+                        <p>10 anos de experiência em logística de alimentos. Garante que sua refeição chegue fresquinha e no tempo certo.</p>
+                        <div class="member-social">
+                            <a href="#" class="social-link">📧</a>
+                            <a href="#" class="social-link">📱</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Certificações e Parcerias -->
+        <section class="certifications-section">
+            <div class="container">
+                <h2 class="section-title">Certificações & Parcerias</h2>
+                <div class="certifications-grid">
+                    <div class="cert-item">
+                        <div class="cert-icon">🏆</div>
+                        <h4>IBD Orgânico</h4>
+                        <p>Certificação que garante a origem orgânica de nossos ingredientes</p>
+                    </div>
+                    <div class="cert-item">
+                        <div class="cert-icon">🌱</div>
+                        <h4>Selo Verde</h4>
+                        <p>Reconhecimento por nossas práticas sustentáveis e embalagens eco-friendly</p>
+                    </div>
+                    <div class="cert-item">
+                        <div class="cert-icon">🥇</div>
+                        <h4>ISO 22000</h4>
+                        <p>Certificação internacional de segurança alimentar e qualidade</p>
+                    </div>
+                    <div class="cert-item">
+                        <div class="cert-icon">🤝</div>
+                        <h4>Parceiros Locais</h4>
+                        <p>Trabalhamos com mais de 50 produtores orgânicos da região</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Números da Empresa -->
+        <section class="stats-section">
+            <div class="container">
+                <h2 class="section-title">Vida no Prato em Números</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="50000">0</div>
+                        <div class="stat-label">Clientes Ativos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="500000">0</div>
+                        <div class="stat-label">Refeições Entregues</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="150">0</div>
+                        <div class="stat-label">Receitas Saudáveis</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="98">0</div>
+                        <div class="stat-label">% Satisfação</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sustentabilidade -->
+        <section class="sustainability-section">
+            <div class="container">
+                <div class="sustainability-content">
+                    <div class="sustainability-text">
+                        <h2>Compromisso com o Planeta</h2>
+                        <p>Na Vida no Prato, acreditamos que alimentação saudável e sustentabilidade andam juntas. Por isso, adotamos práticas responsáveis em toda nossa cadeia produtiva.</p>
+                        
+                        <div class="sustainability-actions">
+                            <div class="action-item">
+                                <span class="action-icon">♻️</span>
+                                <div>
+                                    <h4>Embalagens Sustentáveis</h4>
+                                    <p>100% de nossas embalagens são biodegradáveis ou recicláveis</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-item">
+                                <span class="action-icon">🌾</span>
+                                <div>
+                                    <h4>Ingredientes Orgânicos</h4>
+                                    <p>Priorizamos fornecedores locais e orgânicos certificados</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-item">
+                                <span class="action-icon">🚴</span>
+                                <div>
+                                    <h4>Entregas Eco-Friendly</h4>
+                                    <p>Frota de delivery com bikes elétricas e veículos híbridos</p>
+                                </div>
+                            </div>
+                            
+                            <div class="action-item">
+                                <span class="action-icon">💧</span>
+                                <div>
+                                    <h4>Zero Desperdício</h4>
+                                    <p>Programa de compostagem e reaproveitamento de ingredientes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sustainability-image">
+                        <div class="image-placeholder eco">
+                            <div class="image-icon">🌍</div>
+                            <p>Nosso planeta, nossa responsabilidade</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Depoimentos -->
+        <section class="testimonials-section">
+            <div class="container">
+                <h2 class="section-title">O Que Dizem Sobre Nós</h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <p>"A Vida no Prato transformou completamente minha rotina alimentar. As refeições são deliciosas e me sinto muito mais disposta!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-photo">👩</div>
+                            <div class="author-info">
+                                <h5>Carla Mendes</h5>
+                                <span>Cliente há 2 anos</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <p>"Qualidade excepcional e entrega sempre pontual. É incrível como conseguem manter o frescor em todas as refeições!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-photo">👨</div>
+                            <div class="author-info">
+                                <h5>Roberto Silva</h5>
+                                <span>Cliente há 1 ano</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    
+                    <div class="testimonial-item">
+                        <div class="testimonial-content">
+                            <p>"Adoro a variedade do cardápio e o cuidado com os ingredientes orgânicos. Recomendo para toda a família!"</p>
+                        </div>
+                        <div class="testimonial-author">
+                            <div class="author-photo">👵</div>
+                            <div class="author-info">
+                                <h5>Dona Carmen</h5>
+                                <span>Cliente há 3 anos</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Faça Parte da Nossa História</h2>
+                    <p>Junte-se a milhares de pessoas que já descobriram o prazer de se alimentar bem</p>
+                    <div class="cta-buttons">
+                        <button class="btn-primary">Peça Agora</button>
+                        <button class="btn-secondary">Baixe o App</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3><%= company.name %></h3>
-                    <p>Transformando ideias em soluções digitais desde <%= company.founded %>.</p>
+                    <div class="footer-logo">🌱 Vida no Prato</div>
+                    <p>Comida saudável, sabor incrível</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">📘</a>
+                        <a href="#" class="social-link">📷</a>
+                        <a href="#" class="social-link">🐦</a>
+                        <a href="#" class="social-link">💼</a>
+                    </div>
                 </div>
+                
                 <div class="footer-section">
-                    <h4>Links Rápidos</h4>
+                    <h4>Empresa</h4>
                     <ul>
-                        <li><a href="/">Início</a></li>
-                        <li><a href="/services">Serviços</a></li>
-                        <li><a href="/about">Sobre</a></li>
-                        <li><a href="/#contact">Contato</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Trabalhe Conosco</a></li>
+                        <li><a href="#">Imprensa</a></li>
+                        <li><a href="#">Blog</a></li>
                     </ul>
                 </div>
+                
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Fale Conosco</a></li>
+                        <li><a href="#">WhatsApp</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
                 <div class="footer-section">
                     <h4>Contato</h4>
-                    <p>contato@techsolutions.com.br</p>
-                    <p>(11) 99999-9999</p>
+                    <ul class="contact-info">
+                        <li>📞 (11) 9999-9999</li>
+                        <li>📧 contato@vidanoprato.com.br</li>
+                        <li>📍 São Paulo, SP</li>
+                    </ul>
                 </div>
             </div>
+            
             <div class="footer-bottom">
-                <p>&copy; <%= currentYear %> <%= company.name %>. Todos os direitos reservados.</p>
+                <p>&copy; 2024 Vida no Prato. Todos os direitos reservados.</p>
+                <div class="footer-links">
+                    <a href="#">Termos de Uso</a>
+                    <a href="#">Política de Privacidade</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <script src="/js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
