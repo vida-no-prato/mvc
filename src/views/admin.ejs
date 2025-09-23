@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vida no Prato - Admin</title>
+    <link rel="stylesheet" href="/css/painel-admin.css">
+</head>
+<body>
+    <header class="header">
+    <h1>🌱 GreenEats - Painel Admin</h1>
+    <p>Gerencie seus produtos e categorias</p>
+    <a href="/" class="btn" style="margin-top:15px;display:inline-block;">← Voltar ao Início</a>
+    <div id="welcomeAnimation" style="display:none;position:fixed;bottom:30px;right:30px;z-index:2000;min-width:340px;max-width:90vw;padding:22px 32px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(46,125,50,0.18);font-size:1.25rem;animation:fadeIn 0.7s;">
+        <span style="font-size:1.7rem;vertical-align:middle;margin-right:10px;">🌱</span>
+        Bem-vindo ao painel administrativo do Vida no Prato!!
+    </div>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(40px); }
+        }
+    </style>
+    </header>
+    <div class="container">
+        <!-- ...conteúdo do painel admin... -->
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalProducts">0</div>
+                <div>Produtos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalCategories">0</div>
+                <div>Categorias</div>
+            </div>
+        </div>
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('products')">📦 Produtos</button>
+            <button class="tab" onclick="showTab('categories')">🏷️ Categorias</button>
+        </div>
+        <!-- Products Tab -->
+        <div class="tab-content active" id="products">
+            <h2>Adicionar Produto</h2>
+            <form id="productForm" class="form-grid">
+                <div class="form-group">
+                    <label>Nome *</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label>Preço (R$) *</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Categoria *</label>
+                    <select id="productCategory" required>
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ícone *</label>
+                    <input type="hidden" id="productEmoji" required>
+                    <div class="emoji-grid">
+                        <button type="button" class="emoji-btn" data-emoji="🥗">🥗</button>
+                        <button type="button" class="emoji-btn" data-emoji="🍲">🍲</button>
+                        <button type="button" class="emoji-btn" data-emoji="🥤">🥤</button>
+                        <button type="button" class="emoji-btn" data-emoji="🌯">🌯</button>
+                        <button type="button" class="emoji-btn" data-emoji="🥪">🥪</button>
+                        <button type="button" class="emoji-btn" data-emoji="🍜">🍜</button>
+                        <button type="button" class="emoji-btn" data-emoji="🥙">🥙</button>
+                        <button type="button" class="emoji-btn" data-emoji="🌮">🌮</button>
+                    </div>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Descrição *</label>
+                    <textarea id="productDescription" rows="3" required></textarea>
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <button type="submit" class="btn">✅ Adicionar Produto</button>
+                </div>
+            </form>
+            <table class="data-table" id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Ícone</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <!-- Categories Tab -->
+        <div class="tab-content" id="categories">
+            <h2>Adicionar Categoria</h2>
+            <form id="categoryForm" class="form-grid">
+                <div class="form-group">
+                    <label>Nome *</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label>Chave *</label>
+                    <input type="text" id="categoryKey" required>
+                </div>
+                <div class="form-group">
+                    <label>Ícone *</label>
+                    <input type="hidden" id="categoryEmoji" required>
+                    <div class="emoji-grid">
+                        <button type="button" class="emoji-btn" data-emoji="🥗">🥗</button>
+                        <button type="button" class="emoji-btn" data-emoji="🍲">🍲</button>
+                        <button type="button" class="emoji-btn" data-emoji="🥤">🥤</button>
+                        <button type="button" class="emoji-btn" data-emoji="🌯">🌯</button>
+                    </div>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Descrição *</label>
+                    <textarea id="categoryDescription" rows="3" required></textarea>
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <button type="submit" class="btn">✅ Adicionar Categoria</button>
+                </div>
+            </form>
+            <table class="data-table" id="categoriesTable">
+                <thead>
+                    <tr>
+                        <th>Ícone</th>
+                        <th>Nome</th>
+                        <th>Chave</th>
+                        <th>Produtos</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        // ...código JS do painel admin...
+        // Animação de boas-vindas
+        function showWelcomeAnimation() {
+            const anim = document.getElementById('welcomeAnimation');
+            anim.style.display = 'block';
+            anim.style.animation = 'fadeIn 0.7s';
+            setTimeout(() => {
+                anim.style.animation = 'fadeOut 0.7s';
+                setTimeout(() => {
+                    anim.style.display = 'none';
+                    anim.style.animation = 'fadeIn 0.7s';
+                }, 700);
+            }, 2200);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            showWelcomeAnimation();
+            // ...existing code...
+            updateStats();
+            populateCategories();
+            displayProducts();
+            displayCategories();
+            setupEmojiPickers();
+        });
+        let categories = [
+            { id: 1, name: "Saladas", key: "saladas", emoji: "🥗", description: "Saladas frescas" },
+            { id: 2, name: "Bowls", key: "bowls", emoji: "🍲", description: "Bowls nutritivos" },
+            { id: 3, name: "Sucos", key: "sucos", emoji: "🥤", description: "Sucos naturais" },
+            { id: 4, name: "Lanches", key: "lanches", emoji: "🥙", description: "Lanches saudáveis" }
+        ];
+        let products = [
+            { id: 1, name: "Salada Caesar", description: "Alface, croutons, parmesão", price: 18.90, category: "saladas", emoji: "🥗" },
+            { id: 2, name: "Bowl Proteico", description: "Quinoa, frango, abacate", price: 24.90, category: "bowls", emoji: "🍲" }
+        ];
+        let nextProductId = 3;
+        let nextCategoryId = 5;
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+        }
+        function updateStats() { /* ... */ }
+        function populateCategories() { /* ... */ }
+        function setupEmojiPickers() { /* ... */ }
+        function displayProducts() { /* ... */ }
+        function displayCategories() { /* ... */ }
+        function showToast(message, type = 'success') { /* ... */ }
+        function deleteProduct(id) { /* ... */ }
+        function deleteCategory(id) { /* ... */ }
+        document.getElementById('productForm').onsubmit = function(e) { /* ... */ };
+        document.getElementById('categoryForm').onsubmit = function(e) { /* ... */ };
+        document.getElementById('categoryName').oninput = function() { /* ... */ };
+        updateStats();
+        populateCategories();
+        displayProducts();
+        displayCategories();
+        setupEmojiPickers();
+    </script>
+</body>
+</html>

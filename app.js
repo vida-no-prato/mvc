@@ -3,8 +3,11 @@
 const express = require('express');
 const path = require('path');
 
+
 // Importar rotas
 const routes = require('./src/routes');
+const adminRoutes = require('./src/routes/admin');
+const checkoutRoutes = require('./src/routes/checkout');
 
 const app = express();
 
@@ -19,8 +22,11 @@ app.use(express.static(path.join(__dirname, 'src/public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
 // Usar as rotas
 app.use('/', routes);
+app.use('/admin', adminRoutes);
+app.use('/checkout', checkoutRoutes);
 
 // Middleware para tratamento de erro 404
 app.use((req, res) => {

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vida no Prato - Finalizar Pedido</title>
+    <link rel="stylesheet" href="/css/vida-no-prato.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="container">
+        <div class="header">
+            <div class="nav">
+                <div class="logo">Vida no Prato</div>
+                <a href="/" class="back-btn">← Voltar ao Início</a>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div class="checkout-container">
+            <!-- Checkout Form -->
+            <div class="checkout-form">
+                <h2 class="section-title">🛒 Finalizar Pedido</h2>
+                <form id="checkoutForm">
+                    <!-- ...campos do formulário... -->
+                </form>
+            </div>
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3 class="section-title">📋 Resumo do Pedido</h3>
+                <div id="orderItems">
+                    <!-- ...itens do pedido... -->
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>R$ 80,50</span>
+                </div>
+                <div class="summary-row">
+                    <span>Taxa de Entrega:</span>
+                    <span>R$ 7,90</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>R$ 88,40</span>
+                </div>
+                <div class="delivery-time">
+                    <div class="time">⏱️ 30-45 minutos</div>
+                    <div class="info">Tempo estimado de entrega</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Success Modal -->
+    <div id="successModal" class="success-modal">
+        <div class="success-content">
+            <div class="success-icon">✅</div>
+            <h2 class="success-title">Pedido Confirmado!</h2>
+            <p class="success-message">Seu pedido foi realizado com sucesso e já está sendo preparado com muito carinho.</p>
+            <div class="order-number">
+                <strong>Número do Pedido: #GE2024001</strong>
+            </div>
+            <button class="submit-btn" onclick="closeSuccess()">Acompanhar Pedido</button>
+        </div>
+    </div>
+    <script>
+        // ...código JS do checkout...
+        let selectedPayment = '';
+        function selectPayment(method) { /* ... */ }
+        document.getElementById('cep').addEventListener('blur', function() { /* ... */ });
+        document.getElementById('cep').addEventListener('input', function() { /* ... */ });
+        document.getElementById('telefone').addEventListener('input', function() { /* ... */ });
+        document.getElementById('cardNumber').addEventListener('input', function() { /* ... */ });
+        document.getElementById('cardExpiry').addEventListener('input', function() { /* ... */ });
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) { /* ... */ });
+        function closeSuccess() { /* ... */ }
+        window.addEventListener('click', function(event) { /* ... */ });
+        document.addEventListener('DOMContentLoaded', function() { /* ... */ });
+    </script>
+</body>
+</html>
