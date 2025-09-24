@@ -8,6 +8,7 @@
 </head>
 <body>
     <header class="header">
+      
     <h1>🌱 Vida no Prato - Painel Admin</h1>
     <p>Gerencie seus produtos e categorias</p>
     <a href="/" class="btn" style="margin-top:15px;display:inline-block;">← Voltar ao Início</a>
@@ -27,8 +28,6 @@
     </style>
     </header>
     <div class="container">
-        <!-- ...conteúdo do painel admin... -->
-        <!-- Stats -->
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-number" id="totalProducts">0</div>
@@ -39,15 +38,15 @@
                 <div>Categorias</div>
             </div>
         </div>
-        <!-- Tabs -->
         <div class="tabs">
             <button class="tab active" onclick="showTab('products')">📦 Produtos</button>
             <button class="tab" onclick="showTab('categories')">🏷️ Categorias</button>
         </div>
         <!-- Products Tab -->
         <div class="tab-content active" id="products">
-            <h2>Adicionar Produto</h2>
+            <h2 id="productFormTitle">Adicionar Produto</h2>
             <form id="productForm" class="form-grid">
+                <input type="hidden" id="productIdEdit">
                 <div class="form-group">
                     <label>Nome *</label>
                     <input type="text" id="productName" required>
@@ -81,7 +80,8 @@
                     <textarea id="productDescription" rows="3" required></textarea>
                 </div>
                 <div style="grid-column: 1 / -1;">
-                    <button type="submit" class="btn">✅ Adicionar Produto</button>
+                    <button type="submit" class="btn" id="productSubmitBtn">✅ Adicionar Produto</button>
+                    <button type="button" class="btn" id="productCancelBtn" style="display:none;background:#ccc;color:#333;margin-left:10px;">Cancelar</button>
                 </div>
             </form>
             <table class="data-table" id="productsTable">
@@ -99,8 +99,9 @@
         </div>
         <!-- Categories Tab -->
         <div class="tab-content" id="categories">
-            <h2>Adicionar Categoria</h2>
+            <h2 id="categoryFormTitle">Adicionar Categoria</h2>
             <form id="categoryForm" class="form-grid">
+                <input type="hidden" id="categoryIdEdit">
                 <div class="form-group">
                     <label>Nome *</label>
                     <input type="text" id="categoryName" required>
@@ -124,7 +125,8 @@
                     <textarea id="categoryDescription" rows="3" required></textarea>
                 </div>
                 <div style="grid-column: 1 / -1;">
-                    <button type="submit" class="btn">✅ Adicionar Categoria</button>
+                    <button type="submit" class="btn" id="categorySubmitBtn">✅ Adicionar Categoria</button>
+                    <button type="button" class="btn" id="categoryCancelBtn" style="display:none;background:#ccc;color:#333;margin-left:10px;">Cancelar</button>
                 </div>
             </form>
             <table class="data-table" id="categoriesTable">
@@ -142,7 +144,6 @@
         </div>
     </div>
     <script>
-        // ...código JS do painel admin...
         // Animação de boas-vindas
         function showWelcomeAnimation() {
             const anim = document.getElementById('welcomeAnimation');
@@ -156,27 +157,8 @@
                 }, 700);
             }, 2200);
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            showWelcomeAnimation();
-            // ...existing code...
-            updateStats();
-            populateCategories();
-            displayProducts();
-            displayCategories();
-            setupEmojiPickers();
-        });
-        let categories = [
-            { id: 1, name: "Saladas", key: "saladas", emoji: "🥗", description: "Saladas frescas" },
-            { id: 2, name: "Bowls", key: "bowls", emoji: "🍲", description: "Bowls nutritivos" },
-            { id: 3, name: "Sucos", key: "sucos", emoji: "🥤", description: "Sucos naturais" },
-            { id: 4, name: "Lanches", key: "lanches", emoji: "🥙", description: "Lanches saudáveis" }
-        ];
-        let products = [
-            { id: 1, name: "Salada Caesar", description: "Alface, croutons, parmesão", price: 18.90, category: "saladas", emoji: "🥗" },
-            { id: 2, name: "Bowl Proteico", description: "Quinoa, frango, abacate", price: 24.90, category: "bowls", emoji: "🍲" }
-        ];
-        let nextProductId = 3;
-        let nextCategoryId = 5;
+
+        // Tabs
         function showTab(tabName) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             if (event && event.target) {
@@ -185,22 +167,250 @@
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
         }
-        function updateStats() { /* ... */ }
-        function populateCategories() { /* ... */ }
-        function setupEmojiPickers() { /* ... */ }
-        function displayProducts() { /* ... */ }
-        function displayCategories() { /* ... */ }
-        function showToast(message, type = 'success') { /* ... */ }
-        function deleteProduct(id) { /* ... */ }
-        function deleteCategory(id) { /* ... */ }
-        document.getElementById('productForm').onsubmit = function(e) { /* ... */ };
-        document.getElementById('categoryForm').onsubmit = function(e) { /* ... */ };
-        document.getElementById('categoryName').oninput = function() { /* ... */ };
-        updateStats();
-        populateCategories();
-        displayProducts();
-        displayCategories();
-        setupEmojiPickers();
+
+        // Emoji picker
+        function setupEmojiPickers() {
+            document.querySelectorAll('.emoji-btn').forEach(btn => {
+                btn.onclick = function() {
+                    const input = btn.closest('.form-group').querySelector('input[type="hidden"]');
+                    input.value = btn.dataset.emoji;
+                    btn.closest('.emoji-grid').querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                };
+            });
+        }
+
+        // Preencher categorias do select
+        async function populateCategories() {
+            const res = await fetch('/categorias');
+            const categorias = await res.json();
+            const select = document.getElementById('productCategory');
+            select.innerHTML = '<option value="">Selecione</option>';
+            categorias.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = `${cat.emoji || ''} ${cat.nome}`;
+                select.appendChild(option);
+            });
+            document.getElementById('totalCategories').textContent = categorias.length;
+        }
+
+        // Listar produtos
+        async function displayProducts() {
+            const res = await fetch('/produtos');
+            const produtos = await res.json();
+            const tbody = document.querySelector('#productsTable tbody');
+            tbody.innerHTML = '';
+            produtos.forEach(produto => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${produto.emoji || ''}</td>
+                    <td>${produto.nome}</td>
+                    <td>${produto.categoria}</td>
+                    <td>R$ ${(Number(produto.preco) ? Number(produto.preco).toFixed(2).replace('.', ',') : '0,00')}</td>
+                    <td>
+                        <button class="btn btn-sm" onclick="editProduct(${produto.id})">✏️</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct(${produto.id})">🗑️</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('totalProducts').textContent = produtos.length;
+        }
+
+        // Listar categorias
+        async function displayCategories() {
+            const res = await fetch('/categorias');
+            const categorias = await res.json();
+            const tbody = document.querySelector('#categoriesTable tbody');
+            tbody.innerHTML = '';
+            categorias.forEach(cat => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cat.emoji || ''}</td>
+                    <td>${cat.nome}</td>
+                    <td>${cat.chave}</td>
+                    <td>${cat.total_produtos || 0}</td>
+                    <td>
+                        <button class="btn btn-sm" onclick="editCategory(${cat.id})">✏️</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteCategory(${cat.id})">🗑️</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Adicionar ou editar produto
+        document.getElementById('productForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('productIdEdit').value;
+            const nome = document.getElementById('productName').value;
+            const preco = document.getElementById('productPrice').value;
+            const categoria_id = document.getElementById('productCategory').value;
+            const emoji = document.getElementById('productEmoji').value;
+            const descricao = document.getElementById('productDescription').value;
+
+            if (!nome || !preco || !categoria_id || !emoji || !descricao) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+
+            const payload = { nome, preco, categoria_id, emoji, descricao };
+            let res;
+            if (id) {
+                res = await fetch(`/produtos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } else {
+                res = await fetch('/produtos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            if (res.ok) {
+                alert(id ? 'Produto editado com sucesso!' : 'Produto criado com sucesso!');
+                this.reset();
+                document.getElementById('productIdEdit').value = '';
+                document.getElementById('productFormTitle').textContent = 'Adicionar Produto';
+                document.getElementById('productSubmitBtn').textContent = '✅ Adicionar Produto';
+                document.getElementById('productCancelBtn').style.display = 'none';
+                displayProducts();
+            } else {
+                alert('Erro ao salvar produto!');
+            }
+        };
+
+        // Editar produto
+        window.editProduct = async function(id) {
+            const res = await fetch(`/produtos`);
+            const produtos = await res.json();
+            const produto = produtos.find(p => p.id === id);
+            if (!produto) return;
+            document.getElementById('productIdEdit').value = produto.id;
+            document.getElementById('productName').value = produto.nome;
+            document.getElementById('productPrice').value = produto.preco;
+            document.getElementById('productCategory').value = produto.categoria_id;
+            document.getElementById('productEmoji').value = produto.emoji;
+            document.getElementById('productDescription').value = produto.descricao;
+            document.getElementById('productFormTitle').textContent = 'Editar Produto';
+            document.getElementById('productSubmitBtn').textContent = '💾 Salvar Alterações';
+            document.getElementById('productCancelBtn').style.display = 'inline-block';
+        };
+
+        // Cancelar edição produto
+        document.getElementById('productCancelBtn').onclick = function() {
+            document.getElementById('productForm').reset();
+            document.getElementById('productIdEdit').value = '';
+            document.getElementById('productFormTitle').textContent = 'Adicionar Produto';
+            document.getElementById('productSubmitBtn').textContent = '✅ Adicionar Produto';
+            this.style.display = 'none';
+        };
+
+        // Excluir produto
+        window.deleteProduct = async function(id) {
+            if (!confirm('Tem certeza que deseja excluir este produto?')) return;
+            const res = await fetch(`/produtos/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                alert('Produto excluído!');
+                displayProducts();
+            } else {
+                alert('Erro ao excluir produto!');
+            }
+        };
+
+        // Adicionar ou editar categoria
+        document.getElementById('categoryForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('categoryIdEdit').value;
+            const nome = document.getElementById('categoryName').value;
+            const chave = document.getElementById('categoryKey').value;
+            const emoji = document.getElementById('categoryEmoji').value;
+            const descricao = document.getElementById('categoryDescription').value;
+
+            if (!nome || !chave || !emoji || !descricao) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+
+            const payload = { nome, chave, emoji, descricao };
+            let res;
+            if (id) {
+                res = await fetch(`/categorias/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } else {
+                res = await fetch('/categorias', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            if (res.ok) {
+                alert(id ? 'Categoria editada com sucesso!' : 'Categoria criada com sucesso!');
+                this.reset();
+                document.getElementById('categoryIdEdit').value = '';
+                document.getElementById('categoryFormTitle').textContent = 'Adicionar Categoria';
+                document.getElementById('categorySubmitBtn').textContent = '✅ Adicionar Categoria';
+                document.getElementById('categoryCancelBtn').style.display = 'none';
+                populateCategories();
+                displayCategories();
+            } else {
+                alert('Erro ao salvar categoria!');
+            }
+        };
+
+        // Editar categoria
+        window.editCategory = async function(id) {
+            const res = await fetch(`/categorias`);
+            const categorias = await res.json();
+            const cat = categorias.find(c => c.id === id);
+            if (!cat) return;
+            document.getElementById('categoryIdEdit').value = cat.id;
+            document.getElementById('categoryName').value = cat.nome;
+            document.getElementById('categoryKey').value = cat.chave;
+            document.getElementById('categoryEmoji').value = cat.emoji;
+            document.getElementById('categoryDescription').value = cat.descricao;
+            document.getElementById('categoryFormTitle').textContent = 'Editar Categoria';
+            document.getElementById('categorySubmitBtn').textContent = '💾 Salvar Alterações';
+            document.getElementById('categoryCancelBtn').style.display = 'inline-block';
+        };
+
+        // Cancelar edição categoria
+        document.getElementById('categoryCancelBtn').onclick = function() {
+            document.getElementById('categoryForm').reset();
+            document.getElementById('categoryIdEdit').value = '';
+            document.getElementById('categoryFormTitle').textContent = 'Adicionar Categoria';
+            document.getElementById('categorySubmitBtn').textContent = '✅ Adicionar Categoria';
+            this.style.display = 'none';
+        };
+
+        // Excluir categoria
+        window.deleteCategory = async function(id) {
+            if (!confirm('Tem certeza que deseja excluir esta categoria?')) return;
+            const res = await fetch(`/categorias/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                alert('Categoria excluída!');
+                populateCategories();
+                displayCategories();
+            } else {
+                alert('Erro ao excluir categoria!');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            showWelcomeAnimation();
+            populateCategories();
+            displayProducts();
+            displayCategories();
+            setupEmojiPickers();
+        });
     </script>
 </body>
 </html>

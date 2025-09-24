@@ -1,5 +1,4 @@
 
-
 const express = require('express');
 const path = require('path');
 
@@ -8,6 +7,7 @@ const path = require('path');
 const routes = require('./src/routes');
 const adminRoutes = require('./src/routes/admin');
 const checkoutRoutes = require('./src/routes/checkout');
+
 
 const app = express();
 
