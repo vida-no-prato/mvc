@@ -7,6 +7,8 @@
    <link rel="stylesheet" href="/css/vida-no-prato.css">
 </head>
 <body>
+    <!-- Botão Painel Admin fixo no canto superior direito -->
+    <button class="cart-btn admin-btn-fixo" onclick="window.location.href='/admin'">Painel Admin</button>
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -17,7 +19,6 @@
                     <li><a href="/categories">Categorias</a></li>
                     <li><a href="#cardapio">Cardápio</a></li>
                     <li><a href="/about">Sobre</a></li>
-                    <li><a href="/admin">Painel Admin</a></li>
                     <li><a href="/checkout">Finalizar Pedido</a></li>
                 </ul>
                 <div style="display: flex; gap: 15px; align-items: center;">
@@ -178,6 +179,14 @@
 
     <script src="/js/script.js"></script>
 
+    <style>
+        .admin-btn-fixo {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 2001;
+        }
+    </style>
     <script>
     document.querySelector('a[href="#cardapio"]').addEventListener('click', function(event) {
         event.preventDefault();
