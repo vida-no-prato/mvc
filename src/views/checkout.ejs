@@ -19,34 +19,100 @@
         <!-- Main Content -->
         <div class="checkout-container">
             <div class="checkout-flex">
-                <!-- Checkout Form -->
-                <div class="checkout-form">
-                    <h2 class="section-title">🛒 Finalizar Pedido</h2>
-                    <form id="checkoutForm">
-                        <!-- ...campos do formulário... -->
-                    </form>
-                </div>
-                <!-- Order Summary -->
-                <div class="order-summary">
-                    <h3 class="section-title">📋 Resumo do Pedido</h3>
-                    <div id="orderItems">
-                        <!-- ...itens do pedido... -->
+                <div class="checkout-steps-wrapper">
+                    <!-- ETAPA 1: Resumo do Pedido -->
+                    <div class="checkout-step" id="stepResumo">
+                        <h3 class="section-title">📋 Resumo do Pedido</h3>
+                        <div id="orderItems" class="order-items-list">
+                            <!-- Produtos do carrinho serão inseridos via JS -->
+                        </div>
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotalValor">R$ 0,00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="totalValor">R$ 0,00</span>
+                        </div>
+                        <div style="text-align:center; color:#888; font-size:0.98em; margin-bottom:12px; margin-top:8px;">
+                            Possui um cupom? Adicione-o antes de finalizar o seu pedido!
+                        </div>
+                        <div style="display: flex; justify-content: center; margin-top: 20px;">
+                            <button class="submit-btn" id="btnResumo" onclick="nextStep(1)">Continuar</button>
+                        </div>
                     </div>
-                    <div class="summary-row">
-                        <span>Subtotal:</span>
-                        <span>R$ 80,50</span>
+                    <!-- ETAPA 2: Endereço + Taxa -->
+                    <div class="checkout-step" id="stepEndereco" style="display:none;">
+                        <h3 class="section-title">🏠 Endereço de Entrega</h3>
+                        <form id="formEndereco">
+                            <div class="form-group">
+                                <label for="endereco">Endereço Completo</label>
+                                <input type="text" id="endereco" name="endereco" required placeholder="Rua, número, complemento">
+                            </div>
+                            <div class="form-group">
+                                <label for="cep">CEP</label>
+                                <input type="text" id="cep" name="cep" required placeholder="00000-000">
+                            </div>
+                            <div class="form-group">
+                                <label for="cidade">Cidade</label>
+                                <input type="text" id="cidade" name="cidade" required placeholder="Cidade">
+                            </div>
+                            <div class="form-group">
+                                <label for="taxaEntrega">Calcular Taxa de Entrega</label>
+                                <input type="text" id="taxaEntrega" name="taxaEntrega" value="R$ 7,90" readonly>
+                            </div>
+                            <div class="delivery-time" style="margin-bottom: 20px;">
+                                <div class="time">⏱️ 30-45 minutos</div>
+                                <div class="info">Tempo estimado de entrega</div>
+                            </div>
+                            <button class="submit-btn" id="btnEndereco" type="button" onclick="nextStep(2)">Continuar</button>
+                        </form>
                     </div>
-                    <div class="summary-row">
-                        <span>Taxa de Entrega:</span>
-                        <span>R$ 7,90</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total:</span>
-                        <span>R$ 88,40</span>
-                    </div>
-                    <div class="delivery-time">
-                        <div class="time">⏱️ 30-45 minutos</div>
-                        <div class="info">Tempo estimado de entrega</div>
+                    <!-- ETAPA 3: Pagamento + Cupom -->
+                    <div class="checkout-step" id="stepPagamento" style="display:none;">
+                        <h3 class="section-title">💳 Forma de Pagamento</h3>
+                        <form id="formPagamento">
+                            <div class="form-group">
+                                <label for="tipoPagamento">Como deseja pagar?</label>
+                                <select id="tipoPagamento" name="tipoPagamento" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="site">Pagar pelo site</option>
+                                    <option value="entrega">Pagar na entrega</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="formaPagamentoGroup" style="display:none;">
+                                <label for="pagamento">Forma de pagamento</label>
+                                <select id="pagamento" name="pagamento">
+                                    <option value="">Escolha...</option>
+                                    <option value="cartao">Cartão de Crédito/Débito</option>
+                                    <option value="pix">Pix</option>
+                                    <option value="dinheiro">Dinheiro</option>
+                                </select>
+                            </div>
+                            <div id="cartaoFields" style="display:none;">
+                                <div class="form-group">
+                                    <label for="cardNome">Nome no Cartão</label>
+                                    <input type="text" id="cardNome" name="cardNome" placeholder="Como está no cartão">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardNumber">Número do Cartão</label>
+                                    <input type="text" id="cardNumber" name="cardNumber" maxlength="19" placeholder="0000 0000 0000 0000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardExpiry">Validade</label>
+                                    <input type="text" id="cardExpiry" name="cardExpiry" maxlength="5" placeholder="MM/AA">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardCVC">CVC</label>
+                                    <input type="text" id="cardCVC" name="cardCVC" maxlength="4" placeholder="CVC">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cupom">Aplicar Cupom</label>
+                                <input type="text" id="cupom" name="cupom" placeholder="Digite o cupom">
+                            </div>
+                            <button class="submit-btn" id="btnFinalizar" type="submit">Finalizar Pedido</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -65,20 +131,121 @@
         </div>
     </div>
     <script>
-        // ...código JS do checkout...
-        let selectedPayment = '';
-        function selectPayment(method) { /* ... */ }
-        document.getElementById('cep').addEventListener('blur', function() { /* ... */ });
-        document.getElementById('cep').addEventListener('input', function() { /* ... */ });
-        document.getElementById('telefone').addEventListener('input', function() { /* ... */ });
-        document.getElementById('cardNumber').addEventListener('input', function() { /* ... */ });
-        document.getElementById('cardExpiry').addEventListener('input', function() { /* ... */ });
-        document.getElementById('checkoutForm').addEventListener('submit', function(e) { /* ... */ });
-        function closeSuccess() { /* ... */ }
-        window.addEventListener('click', function(event) { /* ... */ });
-        document.addEventListener('DOMContentLoaded', function() { /* ... */ });
+        // Pagamento dinâmico
+        document.getElementById('tipoPagamento').addEventListener('change', function() {
+            const tipo = this.value;
+            const formaGroup = document.getElementById('formaPagamentoGroup');
+            const pagamentoSelect = document.getElementById('pagamento');
+            const cartaoFields = document.getElementById('cartaoFields');
+            if (tipo === 'site' || tipo === 'entrega') {
+                formaGroup.style.display = 'block';
+            } else {
+                formaGroup.style.display = 'none';
+                cartaoFields.style.display = 'none';
+            }
+            pagamentoSelect.value = '';
+            cartaoFields.style.display = 'none';
+        });
+        document.getElementById('pagamento').addEventListener('change', function() {
+            const tipo = document.getElementById('tipoPagamento').value;
+            const forma = this.value;
+            const cartaoFields = document.getElementById('cartaoFields');
+            if (forma === 'cartao') {
+                cartaoFields.style.display = 'block';
+            } else {
+                cartaoFields.style.display = 'none';
+            }
+        });
+        // Renderiza os itens do carrinho no resumo
+        function renderOrderItems() {
+            const orderItemsEl = document.getElementById('orderItems');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let subtotal = 0;
+            if (cart.length === 0) {
+                orderItemsEl.innerHTML = '<p style="color:#666;text-align:center;">Seu carrinho está vazio.</p>';
+            } else {
+                let html = '<ul style="list-style:none;padding:0;">';
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+                    html += `<li style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eee;">
+                        <span><strong>${item.name}</strong> <span style="color:#888;font-size:0.95em;">x${item.quantity}</span></span>
+                        <span style="color:#4caf50;font-weight:bold;">R$ ${itemTotal.toFixed(2).replace('.', ',')}</span>
+                    </li>`;
+                });
+                html += '</ul>';
+                orderItemsEl.innerHTML = html;
+            }
+            // Atualiza valores
+            document.getElementById('subtotalValor').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            const taxaEntrega = 7.90;
+            document.getElementById('taxaEntregaValor').textContent = `R$ ${taxaEntrega.toFixed(2).replace('.', ',')}`;
+            document.getElementById('totalValor').textContent = `R$ ${(subtotal + taxaEntrega).toFixed(2).replace('.', ',')}`;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOrderItems();
+        });
+        // Exibe apenas uma etapa por vez
+        function nextStep(step) {
+            if (step === 1) {
+                document.getElementById('stepResumo').style.display = 'none';
+                document.getElementById('stepEndereco').style.display = 'block';
+            } else if (step === 2) {
+                document.getElementById('stepEndereco').style.display = 'none';
+                document.getElementById('stepPagamento').style.display = 'block';
+            }
+        }
+        document.getElementById('formPagamento').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simula salvar cartão junto ao usuário
+            const tipo = document.getElementById('tipoPagamento').value;
+            const forma = document.getElementById('pagamento').value;
+            if ((tipo === 'site' || tipo === 'entrega') && forma === 'cartao') {
+                const cardData = {
+                    nome: document.getElementById('cardNome').value,
+                    numero: document.getElementById('cardNumber').value,
+                    validade: document.getElementById('cardExpiry').value,
+                    cvc: document.getElementById('cardCVC').value
+                };
+                // Aqui você salvaria no backend junto ao usuário logado
+                localStorage.setItem('userCard', JSON.stringify(cardData));
+            }
+            document.getElementById('successModal').style.display = 'flex';
+        });
+        function closeSuccess() {
+            document.getElementById('successModal').style.display = 'none';
+        }
     </script>
     <style>
+        .order-items-list ul {
+            margin-bottom: 0;
+        }
+        .order-items-list li {
+            font-size: 1.05em;
+        }
+        .checkout-steps-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .checkout-step {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(76,175,80,0.08);
+            padding: 40px 30px;
+            width: 100%;
+            margin-bottom: 30px;
+            text-align: left;
+            animation: fadeInStep 0.5s;
+        }
+        @keyframes fadeInStep {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .checkout-flex {
             display: flex;
             gap: 60px;

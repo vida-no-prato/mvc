@@ -8,94 +8,99 @@
 </head>
 <body>
     <header class="header">
-      
-    <h1>🌱 Vida no Prato - Painel Admin</h1>
-    <p>Gerencie seus produtos e categorias</p>
-    <a href="/" class="btn" style="margin-top:15px;display:inline-block;">← Voltar ao Início</a>
-    <div id="welcomeAnimation" style="display:none;position:fixed;bottom:30px;right:30px;z-index:2000;min-width:340px;max-width:90vw;padding:22px 32px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(46,125,50,0.18);font-size:1.25rem;animation:fadeIn 0.7s;">
-        <span style="font-size:1.7rem;vertical-align:middle;margin-right:10px;">🌱</span>
-        Bem-vindo ao painel administrativo do Vida no Prato!!
+    <a href="/" class="btn-voltar-inicio">← Voltar ao Início</a>
+        <h1 style="text-align:center;margin-top:32px;">🌱 Vida no Prato - Painel Admin</h1>
+        <p style="text-align:center;">Gerencie seus produtos e categorias</p>
+        <div id="welcomeAnimation" style="display:none;position:fixed;bottom:30px;right:30px;z-index:2000;min-width:340px;max-width:90vw;padding:22px 32px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(46,125,50,0.18);font-size:1.25rem;animation:fadeIn 0.7s;">
+            <span style="font-size:1.7rem;vertical-align:middle;margin-right:10px;">🌱</span>
+            Bem-vindo ao painel administrativo do Vida no Prato!!
+        </div>
+    </header>
+    <div style="max-width:420px;margin:48px auto 0 auto;animation:slideDownFade 0.7s;background:#fff;border-radius:22px;padding:38px 32px 32px 32px;position:relative;z-index:10;text-align:center;box-shadow:none;">
+        <h2 style="color:#2e7d32;font-size:2rem;margin-bottom:8px;">Bem-vindo ao Painel Admin</h2>
     </div>
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(40px); }
-        }
-    </style>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal" style="display:flex;align-items:center;justify-content:center;">
+        <div class="auth-modal-content">
+            <div class="auth-header">
+                <h2 id="authTitle">Acesso ao Painel Admin</h2>
+                <p>Faça login ou cadastre-se para acessar o painel.</p>
+            </div>
+            <div class="auth-body">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchTab('login')">Entrar</button>
+                    <button class="auth-tab" onclick="switchTab('register')">Cadastrar</button>
+                </div>
+                <!-- Login Form -->
+                <form class="auth-form active" id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        <span class="password-toggle" onclick="togglePassword('loginPassword')"></span>
+                    </div>
+                    <button type="submit" class="auth-submit">Entrar na Conta</button>
+                </form>
+                <!-- Register Form -->
+                <form class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Nome Completo</label>
+                        <input type="text" id="registerName" placeholder="Seu nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">E-mail</label>
+                        <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Senha</label>
+                        <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required>
+                        <span class="password-toggle" onclick="togglePassword('registerPassword')"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Senha</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirme sua senha" required>
+                        <span class="password-toggle" onclick="togglePassword('confirmPassword')"></span>
+                    </div>
+                    <button type="submit" class="auth-submit">Criar Conta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- ...existing code... -->
     </header>
     <div class="container">
         <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number" id="totalProducts">0</div>
-                <div>Produtos</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalCategories">0</div>
-                <div>Categorias</div>
-            </div>
-        </div>
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('products')">📦 Produtos</button>
-            <button class="tab" onclick="showTab('categories')">🏷️ Categorias</button>
-        </div>
-        <!-- Products Tab -->
-        <div class="tab-content active" id="products">
-            <h2 id="productFormTitle">Adicionar Produto</h2>
-            <form id="productForm" class="form-grid">
-                <input type="hidden" id="productIdEdit">
-                <div class="form-group">
-                    <label>Nome *</label>
-                    <input type="text" id="productName" required>
-                </div>
-                <div class="form-group">
-                    <label>Preço (R$) *</label>
-                    <input type="number" id="productPrice" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label>Categoria *</label>
-                    <select id="productCategory" required>
-                        <option value="">Selecione</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Ícone *</label>
-                    <input type="hidden" id="productEmoji" required>
-                    <div class="emoji-grid">
-                        <button type="button" class="emoji-btn" data-emoji="🥗">🥗</button>
-                        <button type="button" class="emoji-btn" data-emoji="🍲">🍲</button>
-                        <button type="button" class="emoji-btn" data-emoji="🥤">🥤</button>
-                        <button type="button" class="emoji-btn" data-emoji="🌯">🌯</button>
-                        <button type="button" class="emoji-btn" data-emoji="🥪">🥪</button>
-                        <button type="button" class="emoji-btn" data-emoji="🍜">🍜</button>
-                        <button type="button" class="emoji-btn" data-emoji="🥙">🥙</button>
-                        <button type="button" class="emoji-btn" data-emoji="🌮">🌮</button>
+            <!-- <div class="stat-card">
+                <div class="stat-number" id="totalProducts">0</div> -->
+                <div id="adminPanelWrapper" style="display:none;">
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-number" id="totalProducts">0</div>
+                                <div>Produtos</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="totalCategories">0</div>
+                                <div>Categorias</div>
+                            </div>
+                        </div>
+                        <div class="tabs">
+                            <button class="tab active" onclick="showTab('products')">📦 Produtos</button>
+                            <button class="tab" onclick="showTab('categories')">🏷️ Categorias</button>
+                        </div>
+                        <div class="tab-content active" id="products">
+                            ...existing code...
+                        </div>
+                        <div class="tab-content" id="categories">
+                            ...existing code...
+                        </div>
                     </div>
                 </div>
-                <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>Descrição *</label>
-                    <textarea id="productDescription" rows="3" required></textarea>
-                </div>
-                <div style="grid-column: 1 / -1;">
-                    <button type="submit" class="btn" id="productSubmitBtn">✅ Adicionar Produto</button>
-                    <button type="button" class="btn" id="productCancelBtn" style="display:none;background:#ccc;color:#333;margin-left:10px;">Cancelar</button>
-                </div>
             </form>
-            <table class="data-table" id="productsTable">
-                <thead>
-                    <tr>
-                        <th>Ícone</th>
-                        <th>Nome</th>
-                        <th>Categoria</th>
-                        <th>Preço</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <!-- Tabela removida conforme solicitado -->
         </div>
         <!-- Categories Tab -->
         <div class="tab-content" id="categories">
@@ -144,6 +149,61 @@
         </div>
     </div>
     <script>
+        // Alterna abas do modal de autenticação
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            if (tab === 'login') {
+                document.getElementById('authTitle').textContent = 'Acesso ao Painel Admin';
+                document.getElementById('loginForm').classList.add('active');
+                document.querySelector('.auth-tab[onclick*="login"]').classList.add('active');
+            } else {
+                document.getElementById('authTitle').textContent = 'Cadastro no Painel Admin';
+                document.getElementById('registerForm').classList.add('active');
+                document.querySelector('.auth-tab[onclick*="register"]').classList.add('active');
+            }
+        }
+
+        // Alterna visualização da senha
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const toggle = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                toggle.textContent = '👁️';
+            }
+        }
+        // Tabs do modal admin
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            if (tab === 'login') {
+                document.getElementById('adminAuthTitle').textContent = 'Bem-vindo ao Painel Admin';
+                document.getElementById('adminLoginForm').classList.add('active');
+                document.querySelector('.auth-tab[onclick*="login"]').classList.add('active');
+            } else {
+                document.getElementById('adminAuthTitle').textContent = 'Cadastro de Empresa/Colaborador';
+                document.getElementById('adminRegisterForm').classList.add('active');
+                document.querySelector('.auth-tab[onclick*="register"]').classList.add('active');
+            }
+        }
+        // Toggle senha
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const toggle = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                toggle.textContent = '👁️';
+            }
+        }
+        // Login/Cadastro obrigatório
+        // ...existing code...
         // Animação de boas-vindas
         function showWelcomeAnimation() {
             const anim = document.getElementById('welcomeAnimation');

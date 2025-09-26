@@ -75,7 +75,7 @@ const products = [
 ];
 
 // Global variables
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let currentFilter = 'todos';
 let currentUser = null;
 
@@ -243,10 +243,13 @@ function filterProducts(category) {
 }
 
 // Add to cart
+
+// Update cart count
+// Adiciona produto ao carrinho
 function addToCart(productId) {
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
     const product = products.find(p => p.id === productId);
     const existingItem = cart.find(item => item.id === productId);
-
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
@@ -255,36 +258,36 @@ function addToCart(productId) {
             quantity: 1
         });
     }
-
+    localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 
-    // Visual feedback com intervalos claros
-    const btn = event.target;
-    btn.innerHTML = '<div class="loading"></div>';
-    btn.disabled = true;
-
-    setTimeout(() => {
-        btn.innerHTML = 'Adicionado!';
-        btn.style.background = '#4caf50';
-
+    // Visual feedback
+    if (event && event.target) {
+        const btn = event.target;
+        btn.innerHTML = '<div class="loading"></div>';
+        btn.disabled = true;
         setTimeout(() => {
-            btn.innerHTML = 'Adicionar';
-            btn.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
-            btn.disabled = false;
-        }, 1000);
-    }, 700); // loader visível por 700ms
+            btn.innerHTML = 'Adicionado!';
+            btn.style.background = '#4caf50';
+            setTimeout(() => {
+                btn.innerHTML = 'Adicionar';
+                btn.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+                btn.disabled = false;
+            }, 1000);
+        }, 700);
+    }
 }
-
-// Update cart count
 function updateCartCount() {
     const count = cart.reduce((total, item) => total + item.quantity, 0);
-    document.getElementById('cartCount').textContent = count;
-    
+    const cartCountEl = document.getElementById('cartCount');
     if (count > 0) {
-        document.getElementById('cartCount').style.display = 'flex';
+        cartCountEl.textContent = count;
+        cartCountEl.style.display = 'flex';
     } else {
-        document.getElementById('cartCount').style.display = 'none';
+        cartCountEl.textContent = '';
+        cartCountEl.style.display = 'none';
     }
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 // Open cart modal
@@ -293,14 +296,14 @@ function openCart() {
     const cartItems = document.getElementById('cartItems');
     const cartTotal = document.getElementById('cartTotal');
 
-    // Display cart items
+    // Atualiza carrinho do localStorage antes de exibir
+    cart = JSON.parse(localStorage.getItem('cart')) || [];
     if (cart.length === 0) {
         cartItems.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Seu carrinho está vazio</p>';
         cartTotal.textContent = 'Total: R$ 0,00';
     } else {
         cartItems.innerHTML = '';
         let total = 0;
-
         cart.forEach(item => {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
@@ -316,7 +319,6 @@ function openCart() {
             cartItems.appendChild(cartItem);
             total += item.price * item.quantity;
         });
-
         cartTotal.textContent = `Total: R$ ${total.toFixed(2).replace('.', ',')}`;
     }
 
@@ -334,27 +336,14 @@ function checkout() {
         alert('Seu carrinho está vazio!');
         return;
     }
-
-    const checkoutBtn = document.querySelector('.checkout-btn');
-    const checkoutText = document.getElementById('checkoutText');
-    
-    checkoutText.innerHTML = '<div class="loading"></div> Processando...';
-    checkoutBtn.disabled = true;
-
-    setTimeout(() => {
-        alert('Pedido realizado com sucesso! 🎉\n\nSeu pedido chegará em aproximadamente 30-45 minutos.');
-        cart = [];
-        updateCartCount();
-        closeCart();
-        
-        checkoutText.textContent = 'Finalizar Pedido';
-        checkoutBtn.disabled = false;
-    }, 2000);
+    window.location.href = '/checkout';
 }
 
 // Form submissions
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize page
+    cart = [];
+    localStorage.setItem('cart', JSON.stringify(cart));
     displayProducts(products);
     updateCartCount();
 

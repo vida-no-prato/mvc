@@ -6,6 +6,22 @@
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/vida-no-prato.css">
 <body>
+    <!-- Botão Carrinho fixo no canto superior direito -->
+    <button class="cart-btn admin-btn-fixo" onclick="openCart()">🛒 Carrinho <span class="cart-count" id="cartCount">0</span></button>
+    <!-- Modal do Carrinho -->
+    <div id="cartModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Meu Carrinho</h2>
+            <div class="cart-items" id="cartItems">
+                <p style="text-align: center; color: #666; padding: 20px;">Seu carrinho está vazio</p>
+            </div>
+            <div class="cart-total" id="cartTotal">Total: R$ 0,00</div>
+            <button class="checkout-btn" onclick="checkout()">
+                <span id="checkoutText">Finalizar Pedido</span>
+            </button>
+        </div>
+    </div>
     <a href="/" class="btn-voltar-inicio">← Voltar ao Início</a>
     <h2 class="section-title topo-categorias">Nossas Especialidades</h2>
     <section class="categories" id="categorias">
@@ -481,6 +497,12 @@
         }
         .btn-voltar-inicio:hover {
             background: #2e7d32;
+        }
+        .admin-btn-fixo {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 2001;
         }
     </style>
 </body>
