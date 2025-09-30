@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vida no Prato - Admin</title>
+    <title>Vida no Prato - Colaborador</title>
     <link rel="stylesheet" href="/css/painel-admin.css">
+    <style>
+    /* ...estilos removidos, agora tudo usa painel-admin.css... */
+    </style>
 </head>
 <body>
-
     <div id="authModal" class="auth-modal" style="display:flex;align-items:center;justify-content:center;">
         <div class="auth-modal-content">
             <div class="auth-header">
+
                 <h2 id="authTitle">Acesso ao Painel Admin</h2>
                 <p>Faça login para acessar o painel.</p>
+
             </div>
             <div class="auth-body">
                  <div class="auth-tabs">
@@ -33,7 +37,6 @@
             </div>
         </div>
     </div>
-
     <div id="adminPanelWrapper" style="display:none;">
         <header class="header">
             <a href="/" class="btn-voltar-inicio">← Voltar ao Início</a>
@@ -50,6 +53,7 @@
                 <div class="stat-card"><div class="stat-number" id="totalProducts">0</div><div>Produtos</div></div>
                 <div class="stat-card"><div class="stat-number" id="totalCategories">0</div><div>Categorias</div></div>
             </div>
+
             <div class="tabs">
                 <button class="tab active" onclick="showTab('products')">📦 Produtos</button>
                 <button class="tab" onclick="showTab('categories')">🏷️ Categorias</button>
@@ -104,7 +108,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // --- FUNÇÕES GLOBAIS ---
         function togglePassword(inputId) {
@@ -314,6 +317,78 @@
                 document.getElementById('categorySubmitBtn').textContent = '✅ Adicionar Categoria';
                 this.style.display = 'none';
             };
+        });
+
+        // Painel Colaborador - Tabs
+        function showTab(tab) {
+            document.querySelectorAll('#colaboradorPanel .tab').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('#colaboradorPanel .tab-content').forEach(tc => tc.classList.remove('active'));
+            document.querySelector(`#colaboradorPanel .tab[onclick*="showTab('${tab}')"]`).classList.add('active');
+            document.getElementById(tab).classList.add('active');
+        }
+
+        // Painel Colaborador - Emoji Picker
+        document.querySelectorAll('#colaboradorPanel .emoji-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const group = this.parentElement;
+                group.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                const input = group.previousElementSibling;
+                input.value = this.dataset.emoji;
+            });
+        });
+
+        // Painel Colaborador - Formulários
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simulação de adição de produto
+            const name = document.getElementById('productName').value;
+            const price = document.getElementById('productPrice').value;
+            const cat = document.getElementById('productCategory').value;
+            const emoji = document.getElementById('productEmoji').value;
+            const desc = document.getElementById('productDescription').value;
+            if (!name || !price || !cat || !emoji || !desc) return;
+            const tbody = document.querySelector('#productsTable tbody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${emoji}</td><td>${name}</td><td>${cat}</td><td>R$ ${parseFloat(price).toFixed(2)}</td><td><button onclick="this.closest('tr').remove()">🗑️</button></td>`;
+            tbody.appendChild(tr);
+            document.getElementById('productForm').reset();
+            document.querySelectorAll('#productForm .emoji-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('productEmoji').value = '';
+            updateStats();
+        });
+        document.getElementById('categoryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simulação de adição de categoria
+            const name = document.getElementById('categoryName').value;
+            const key = document.getElementById('categoryKey').value;
+            const emoji = document.getElementById('categoryEmoji').value;
+            const desc = document.getElementById('categoryDescription').value;
+            if (!name || !key || !emoji || !desc) return;
+            const tbody = document.querySelector('#categoriesTable tbody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${emoji}</td><td>${name}</td><td>${key}</td><td>0</td><td><button onclick="this.closest('tr').remove()">🗑️</button></td>`;
+            tbody.appendChild(tr);
+            document.getElementById('categoryForm').reset();
+            document.querySelectorAll('#categoryForm .emoji-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('categoryEmoji').value = '';
+            updateCategoryOptions();
+            updateStats();
+        });
+        function updateCategoryOptions() {
+            const select = document.getElementById('productCategory');
+            const cats = Array.from(document.querySelectorAll('#categoriesTable tbody tr')).map(tr => tr.children[1].textContent);
+            select.innerHTML = '<option value="">Selecione</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+        function updateStats() {
+            document.getElementById('totalProducts').textContent = document.querySelectorAll('#productsTable tbody tr').length;
+            document.getElementById('totalCategories').textContent = document.querySelectorAll('#categoriesTable tbody tr').length;
+        }
+        // Atualiza stats e selects ao remover
+        document.querySelector('#productsTable tbody').addEventListener('click', updateStats);
+        document.querySelector('#categoriesTable tbody').addEventListener('click', function() {
+            updateCategoryOptions();
+            updateStats();
         });
     </script>
 </body>
