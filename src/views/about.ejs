@@ -385,6 +385,39 @@
     </footer>
 
     <script src="js/script.js"></script>
+    <script>
+    // Corrige botões de login e carrinho na página About
+    document.addEventListener('DOMContentLoaded', function() {
+        // Botão de login
+        var loginBtn = document.querySelector('.login-btn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', function() {
+                // Se existir modal de autenticação, exibe
+                var authModal = document.getElementById('authModal');
+                if (authModal) {
+                    authModal.style.display = 'flex';
+                } else {
+                    window.location.href = '/admin';
+                }
+            });
+        }
+        // Botão do carrinho
+        var cartBtns = document.querySelectorAll('.cart-btn');
+        cartBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                // Se for o botão fixo do admin, ignora
+                if (btn.classList.contains('admin-btn-fixo')) return;
+                // Se existir modal do carrinho, exibe
+                var cartModal = document.getElementById('cartModal');
+                if (cartModal) {
+                    cartModal.style.display = 'block';
+                } else {
+                    window.location.href = '/checkout';
+                }
+            });
+        });
+    });
+    </script>
     <style>
         .logo-emoji {
             display: inline-block;
