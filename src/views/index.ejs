@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vida no Prato - Comida Saudável</title>
-   <link rel="stylesheet" href="/css/vida-no-prato.css">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/vida-no-prato.css">
 </head>
 <body>
-    <!-- Botão Para Colaboradores fixo no canto superior direito -->
     <button class="cart-btn admin-btn-fixo" onclick="window.location.href='/admin'">Para Colaboradores</button>
-    <!-- Header -->
+
     <header class="header">
         <div class="container">
             <nav class="nav">
@@ -17,9 +16,8 @@
                 <ul class="nav-links">
                     <li><a href="/">Início</a></li>
                     <li><a href="/categories">Categorias</a></li>
-                    <li><a href="#cardapio">Cardápio</a></li>
+                    <li><a href="#produtos">Cardápio</a></li>
                     <li><a href="/about">Sobre</a></li>
-                    <li><a href="/checkout">Finalizar Pedido</a></li>
                 </ul>
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <button class="login-btn" onclick="openAuthModal()">
@@ -34,10 +32,8 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Hero Section -->
             <section class="hero" id="inicio">
                 <div class="hero-content">
                     <h1>Comida Saudável, Sabor Incrível</h1>
@@ -48,151 +44,73 @@
                 </div>
             </section>
 
-            <!-- Products -->
             <section class="products" id="produtos">
                 <h2 class="section-title">Nosso Cardápio</h2>
 
+                <% if (typeof categorias !== 'undefined' && categorias.length > 0) { %>
+                <div class="filter-bar" id="filterBar">
+                    <button class="filter-btn active" onclick="filterProducts('todos')">Todos</button>
+                    <% categorias.forEach(categoria => { %>
+                        <% if (categoria && categoria.slug && categoria.nome) { %>
+                            <button class="filter-btn" onclick="filterProducts('<%= categoria.slug %>')">
+                                <%= categoria.emoji || '🥗' %> <%= categoria.nome %>
+                            </button>
+                        <% } %>
+                    <% }) %>
+                </div>
+                <% } %>
+
                 <div class="products-grid" id="productsGrid">
-                    <!-- Products will be populated by JavaScript -->
+                  <% if (typeof produtos !== 'undefined' && produtos.length > 0) { %>
+                    <% produtos.forEach((product, index) => { %>
+                      <% if (product && product.id) { %>
+                        <div class="product-card" data-category="<%= product.categoria_slug || 'sem-categoria' %>" style="animation-delay: <%= index * 0.05 %>s;">
+                            <img class="product-image" src="/images/default-plate.jpg" alt="<%= product.nome %>"/>
+                            <div class="product-info">
+                                <h3 class="product-name"><%= product.emoji || '🍲' %> <%= product.nome || 'Produto Indisponível' %></h3>
+                                <p class="product-description"><%= product.descricao || 'Sem descrição.' %></p>
+                                <div class="product-footer">
+                                    <span class="product-price">
+                                      <% if (typeof product.preco === 'number') { %>
+                                        R$ <%= product.preco.toFixed(2).replace('.', ',') %>
+                                      <% } else { %>
+                                        R$ 0,00
+                                      <% } %>
+                                    </span>
+                                    <button class="add-to-cart" onclick="addToCart(<%= product.id %>, this)">
+                                        Adicionar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                      <% } %>
+                    <% }) %>
+                  <% } else { %>
+                    <p style="text-align: center; width: 100%;">Nenhum produto cadastrado no momento. Volte em breve!</p>
+                  <% } %>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- Auth Modal -->
-    <div id="authModal" class="auth-modal">
-        <div class="auth-modal-content">
-            <div class="auth-header">
-                <span class="auth-close" onclick="closeAuthModal()">&times;</span>
-                <h2 id="authTitle">Bem-vindo ao Vida no Prato</h2>
-                <p>Sua jornada saudável começa aqui 🌱</p>
-            </div>
-            
-            <div class="auth-body">
-                <div class="auth-tabs">
-                    <button class="auth-tab active" onclick="switchTab('login')">Entrar</button>
-                    <button class="auth-tab" onclick="switchTab('register')">Cadastrar</button>
-                </div>
+    <%- include('partials/modals') %>
 
-                <!-- Login Form -->
-                <form class="auth-form active" id="loginForm">
-                    <div class="form-group">
-                        <label for="loginEmail">E-mail</label>
-                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
-                        <span class="input-icon">📧</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="loginPassword">Senha</label>
-                        <input type="password" id="loginPassword" placeholder="••••••••" required>
-                        <span class="password-toggle" onclick="togglePassword('loginPassword')">👁️</span>
-                    </div>
-                    
-                    <button type="submit" class="auth-submit">
-                        Entrar na Conta
-                    </button>
-                    
-                    <div class="forgot-password">
-                        <a href="#" onclick="showForgotPassword()">Esqueci minha senha</a>
-                    </div>
-                </form>
-
-                <!-- Register Form -->
-                <form class="auth-form" id="registerForm">
-                    <div class="form-group">
-                        <label for="registerName">Nome Completo</label>
-                        <input type="text" id="registerName" placeholder="Seu nome completo" required>
-                        <span class="input-icon">👤</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerEmail">E-mail</label>
-                        <input type="email" id="registerEmail" placeholder="seu@email.com" required>
-                        <span class="input-icon">📧</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerPhone">Telefone</label>
-                        <input type="tel" id="registerPhone" placeholder="(11) 99999-9999" required>
-                        <span class="input-icon">📱</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerPassword">Senha</label>
-                        <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required>
-                        <span class="password-toggle" onclick="togglePassword('registerPassword')">👁️</span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirmar Senha</label>
-                        <input type="password" id="confirmPassword" placeholder="Confirme sua senha" required>
-                        <span class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</span>
-                    </div>
-                    
-                    <button type="submit" class="auth-submit">
-                        Criar Conta
-                    </button>
-                </form>
-
-                <div class="social-login">
-                    <p>ou continue com</p>
-                    <div class="social-buttons">
-                        <button class="social-btn" onclick="socialLogin('google')">
-                            🔍 Google
-                        </button>
-                        <button class="social-btn" onclick="socialLogin('facebook')">
-                            📘 Facebook
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- User Menu -->
-    <div class="user-menu" id="userMenu">
-        <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">
-            U
-        </div>
-        <div class="dropdown" id="userDropdown">
-            <a href="#" onclick="showProfile()">👤 Meu Perfil</a>
-            <a href="#" onclick="showOrders()">📦 Meus Pedidos</a>
-            <a href="#" onclick="showFavorites()">❤️ Favoritos</a>
-            <a href="#" onclick="logout()">🚪 Sair</a>
-        </div>
-    </div>
-
-    <!-- Cart Modal -->
-    <div id="cartModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeCart()">&times;</span>
-            <h2>Meu Carrinho</h2>
-            <div class="cart-items" id="cartItems">
-                <p style="text-align: center; color: #666; padding: 20px;">Seu carrinho está vazio</p>
-            </div>
-            <div class="cart-total" id="cartTotal">Total: R$ 0,00</div>
-            <button class="checkout-btn" onclick="checkout()">
-                <span id="checkoutText">Finalizar Pedido</span>
-            </button>
-        </div>
-    </div>
+    <script>
+        // Esta linha é a forma correta de passar os dados do backend para o frontend.
+        // O erro do seu editor pode ser ignorado aqui.
+        const allProducts = <%- JSON.stringify(produtos || []) %>;
+    </script>
 
     <script src="/js/script.js"></script>
 
     <style>
-        .admin-btn-fixo {
-            position: fixed;
-            top: 20px;
-            right: 30px;
-            z-index: 2001;
+        .admin-btn-fixo { position: fixed; top: 20px; right: 30px; z-index: 2001; }
+        .product-card { display: flex; flex-direction: column; opacity: 0; animation: slideInUp 0.5s ease forwards; }
+        .product-card.hidden { display: none; }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
-    <script>
-    document.querySelector('a[href="#cardapio"]').addEventListener('click', function(event) {
-        event.preventDefault();
-        document.getElementById('produtos').scrollIntoView({ behavior: 'smooth' });
-    });
-</script>
-
 </body>
 </html>

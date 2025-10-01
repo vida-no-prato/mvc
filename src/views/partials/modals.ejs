@@ -1,0 +1,112 @@
+<div id="authModal" class="auth-modal">
+    <div class="auth-modal-content">
+        <div class="auth-header">
+            <span class="auth-close" onclick="closeAuthModal()">&times;</span>
+            <h2 id="authTitle">Bem-vindo ao Vida no Prato</h2>
+            <p>Sua jornada saudável começa aqui 🌱</p>
+        </div>
+        
+        <div class="auth-body">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('login')">Entrar</button>
+                <button class="auth-tab" onclick="switchTab('register')">Cadastrar</button>
+            </div>
+
+            <form class="auth-form active" id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">E-mail</label>
+                    <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                    <span class="input-icon">📧</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    <span class="password-toggle" onclick="togglePassword('loginPassword')">👁️</span>
+                </div>
+                
+                <button type="submit" class="auth-submit">
+                    Entrar na Conta
+                </button>
+                
+                <div class="forgot-password">
+                    <a href="#" onclick="showForgotPassword()">Esqueci minha senha</a>
+                </div>
+            </form>
+
+            <form class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Nome Completo</label>
+                    <input type="text" id="registerName" placeholder="Seu nome completo" required>
+                    <span class="input-icon">👤</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">E-mail</label>
+                    <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+                    <span class="input-icon">📧</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPhone">Telefone</label>
+                    <input type="tel" id="registerPhone" placeholder="(11) 99999-9999" required>
+                    <span class="input-icon">📱</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Senha</label>
+                    <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required>
+                    <span class="password-toggle" onclick="togglePassword('registerPassword')">👁️</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Senha</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirme sua senha" required>
+                    <span class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</span>
+                </div>
+                
+                <button type="submit" class="auth-submit">
+                    Criar Conta
+                </button>
+            </form>
+
+            <div class="social-login">
+                <p>ou continue com</p>
+                <div class="social-buttons">
+                    <button class="social-btn" onclick="socialLogin('google')">
+                        🔍 Google
+                    </button>
+                    <button class="social-btn" onclick="socialLogin('facebook')">
+                        📘 Facebook
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="user-menu" id="userMenu">
+    <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">
+        U
+    </div>
+    <div class="dropdown" id="userDropdown">
+        <a href="#" onclick="showProfile()">👤 Meu Perfil</a>
+        <a href="#" onclick="showOrders()">📦 Meus Pedidos</a>
+        <a href="#" onclick="showFavorites()">❤️ Favoritos</a>
+        <a href="#" onclick="logout()">🚪 Sair</a>
+    </div>
+</div>
+
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCart()">&times;</span>
+        <h2>Meu Carrinho</h2>
+        <div class="cart-items" id="cartItems">
+            <p style="text-align: center; color: #666; padding: 20px;">Seu carrinho está vazio</p>
+        </div>
+        <div class="cart-total" id="cartTotal">Total: R$ 0,00</div>
+        <button class="checkout-btn" onclick="checkout()">
+            <span id="checkoutText">Finalizar Pedido</span>
+        </button>
+    </div>
+</div>
