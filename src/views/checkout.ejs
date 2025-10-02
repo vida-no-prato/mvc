@@ -4,305 +4,210 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vida no Prato - Finalizar Pedido</title>
-    <link rel="stylesheet" href="/css/vida-no-prato.css">
 </head>
 <body>
-    <!-- Botão Voltar ao Início fixo -->
-    <a href="/" class="cart-btn btn-voltar-inicio">← Voltar ao Início</a>
-    <!-- Header -->
-    <div class="container">
-        <div class="header">
-            <div class="nav">
-                <div class="logo">Vida no Prato</div>
+
+    <a href="/" class="btn-voltar">← Voltar ao início</a>
+
+    <div class="checkout-container">
+        <div class="order-summary-card">
+            <h2 class="summary-title">Resumo do pedido</h2>
+            
+            <div id="orderItems" class="order-items-list">
+                </div>
+
+            <div class="coupon-section">
+                <input type="text" id="cupomInput" placeholder="Digite seu cupom">
+                <button id="applyCouponBtn" onclick="applyCoupon()">Aplicar</button>
             </div>
-        </div>
-        <!-- Main Content -->
-        <div class="checkout-container">
-            <div class="checkout-flex">
-                <div class="checkout-steps-wrapper">
-                    <!-- ETAPA 1: Resumo do Pedido -->
-                    <div class="checkout-step" id="stepResumo">
-                        <h3 class="section-title">📋 Resumo do Pedido</h3>
-                        <div id="orderItems" class="order-items-list">
-                            <!-- Produtos do carrinho serão inseridos via JS -->
-                        </div>
-                        <div class="summary-row">
-                            <span>Subtotal:</span>
-                            <span id="subtotalValor">R$ 0,00</span>
-                        </div>
-                        <div class="summary-row total">
-                            <span>Total:</span>
-                            <span id="totalValor">R$ 0,00</span>
-                        </div>
-                        <div style="text-align:center; color:#888; font-size:0.98em; margin-bottom:12px; margin-top:8px;">
-                            Possui um cupom? Adicione-o antes de finalizar o seu pedido!
-                        </div>
-                        <div style="display: flex; justify-content: center; margin-top: 20px;">
-                            <button class="submit-btn" id="btnResumo" onclick="nextStep(1)">Continuar</button>
-                        </div>
-                    </div>
-                    <!-- ETAPA 2: Endereço + Taxa -->
-                    <div class="checkout-step" id="stepEndereco" style="display:none;">
-                        <h3 class="section-title">🏠 Endereço de Entrega</h3>
-                        <form id="formEndereco">
-                            <div class="form-group">
-                                <label for="endereco">Endereço Completo</label>
-                                <input type="text" id="endereco" name="endereco" required placeholder="Rua, número, complemento">
-                            </div>
-                            <div class="form-group">
-                                <label for="cep">CEP</label>
-                                <input type="text" id="cep" name="cep" required placeholder="00000-000">
-                            </div>
-                            <div class="form-group">
-                                <label for="cidade">Cidade</label>
-                                <input type="text" id="cidade" name="cidade" required placeholder="Cidade">
-                            </div>
-                            <div class="form-group">
-                                <label for="taxaEntrega">Calcular Taxa de Entrega</label>
-                                <input type="text" id="taxaEntrega" name="taxaEntrega" value="R$ 7,90" readonly>
-                            </div>
-                            <div class="delivery-time" style="margin-bottom: 20px;">
-                                <div class="time">⏱️ 30-45 minutos</div>
-                                <div class="info">Tempo estimado de entrega</div>
-                            </div>
-                            <button class="submit-btn" id="btnEndereco" type="button" onclick="nextStep(2)">Continuar</button>
-                        </form>
-                    </div>
-                    <!-- ETAPA 3: Pagamento + Cupom -->
-                    <div class="checkout-step" id="stepPagamento" style="display:none;">
-                        <h3 class="section-title">💳 Forma de Pagamento</h3>
-                        <form id="formPagamento">
-                            <div class="form-group">
-                                <label for="tipoPagamento">Como deseja pagar?</label>
-                                <select id="tipoPagamento" name="tipoPagamento" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="site">Pagar pelo site</option>
-                                    <option value="entrega">Pagar na entrega</option>
-                                </select>
-                            </div>
-                            <div class="form-group" id="formaPagamentoGroup" style="display:none;">
-                                <label for="pagamento">Forma de pagamento</label>
-                                <select id="pagamento" name="pagamento">
-                                    <option value="">Escolha...</option>
-                                    <option value="cartao">Cartão de Crédito/Débito</option>
-                                    <option value="pix">Pix</option>
-                                    <option value="dinheiro">Dinheiro</option>
-                                </select>
-                            </div>
-                            <div id="cartaoFields" style="display:none;">
-                                <div class="form-group">
-                                    <label for="cardNome">Nome no Cartão</label>
-                                    <input type="text" id="cardNome" name="cardNome" placeholder="Como está no cartão">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cardNumber">Número do Cartão</label>
-                                    <input type="text" id="cardNumber" name="cardNumber" maxlength="19" placeholder="0000 0000 0000 0000">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cardExpiry">Validade</label>
-                                    <input type="text" id="cardExpiry" name="cardExpiry" maxlength="5" placeholder="MM/AA">
-                                </div>
-                                <div class="form-group">
-                                    <label for="cardCVC">CVC</label>
-                                    <input type="text" id="cardCVC" name="cardCVC" maxlength="4" placeholder="CVC">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="cupom">Aplicar Cupom</label>
-                                <input type="text" id="cupom" name="cupom" placeholder="Digite o cupom">
-                            </div>
-                            <button class="submit-btn" id="btnFinalizar" type="submit">Finalizar Pedido</button>
-                        </form>
-                    </div>
+            <div id="couponFeedback" class="coupon-feedback"></div>
+
+            <div class="summary-footer">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="subtotalValor">R$ 0,00</span>
+                </div>
+                <div class="summary-row discount-row" id="discountRow" style="display: none;">
+                    <span>Desconto</span>
+                    <span id="discountValue">- R$ 0,00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Taxa de Entrega</span>
+                    <span id="taxaEntregaValor">R$ 7,90</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span id="totalValor">R$ 0,00</span>
                 </div>
             </div>
         </div>
+
+        <div class="customer-details">
+            <form id="checkoutForm">
+                <div class="form-section">
+                    <h3 class="form-section-title">Endereço de Entrega</h3>
+                    <div class="form-group"><label for="cep">CEP</label><input type="text" id="cep" name="cep" required placeholder="00000-000"></div>
+                    <div class="form-group"><label for="endereco">Endereço Completo</label><input type="text" id="endereco" name="endereco" required placeholder="Rua, número, complemento"></div>
+                    <div class="form-group"><label for="cidade">Cidade</label><input type="text" id="cidade" name="cidade" required placeholder="Sua cidade"></div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Forma de Pagamento</h3>
+                    <div class="form-group">
+                        <label for="pagamento">Como deseja pagar?</label>
+                        <select id="pagamento" name="pagamento" required>
+                            <option value="">Escolha uma opção...</option>
+                            <option value="cartao">Cartão de Crédito/Débito</option>
+                            <option value="pix">Pix</option>
+                            <option value="dinheiro">Dinheiro (na entrega)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="submit-btn" type="submit">Finalizar Pedido</button>
+            </form>
+        </div>
     </div>
-    <!-- Success Modal -->
+
     <div id="successModal" class="success-modal">
         <div class="success-content">
             <div class="success-icon">✅</div>
             <h2 class="success-title">Pedido Confirmado!</h2>
-            <p class="success-message">Seu pedido foi realizado com sucesso e já está sendo preparado com muito carinho.</p>
+            <p class="success-message">Seu pedido foi realizado com sucesso e já está sendo preparado.</p>
             <div class="order-number">
-                <strong>Número do Pedido: #GE2024001</strong>
+                <strong>Número do Pedido: #...</strong>
             </div>
-            <button class="submit-btn" onclick="closeSuccess()">Acompanhar Pedido</button>
+            <button class="submit-btn">Acompanhar Pedido</button>
         </div>
     </div>
+
+
     <script>
-        // Pagamento dinâmico
-        document.getElementById('tipoPagamento').addEventListener('change', function() {
-            const tipo = this.value;
-            const formaGroup = document.getElementById('formaPagamentoGroup');
-            const pagamentoSelect = document.getElementById('pagamento');
-            const cartaoFields = document.getElementById('cartaoFields');
-            if (tipo === 'site' || tipo === 'entrega') {
-                formaGroup.style.display = 'block';
-            } else {
-                formaGroup.style.display = 'none';
-                cartaoFields.style.display = 'none';
-            }
-            pagamentoSelect.value = '';
-            cartaoFields.style.display = 'none';
-        });
-        document.getElementById('pagamento').addEventListener('change', function() {
-            const tipo = document.getElementById('tipoPagamento').value;
-            const forma = this.value;
-            const cartaoFields = document.getElementById('cartaoFields');
-            if (forma === 'cartao') {
-                cartaoFields.style.display = 'block';
-            } else {
-                cartaoFields.style.display = 'none';
-            }
-        });
-        // Renderiza os itens do carrinho no resumo
+        // --- LÓGICA DO CHECKOUT ---
+        const validCoupons = { "DESCONTO10": { type: "percentage", value: 10 }, "FRETEGRATIS": { type: "fixed", value: 7.90 } };
+        let currentDiscount = 0;
+        let subtotal = 0;
+        const taxaEntrega = 7.90;
+
         function renderOrderItems() {
             const orderItemsEl = document.getElementById('orderItems');
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let subtotal = 0;
+            subtotal = 0;
             if (cart.length === 0) {
-                orderItemsEl.innerHTML = '<p style="color:#666;text-align:center;">Seu carrinho está vazio.</p>';
+                orderItemsEl.innerHTML = '<p class="empty-cart-message">Seu carrinho está vazio.</p>';
             } else {
-                let html = '<ul style="list-style:none;padding:0;">';
+                orderItemsEl.innerHTML = '';
                 cart.forEach(item => {
-                    const itemTotal = item.price * item.quantity;
+                    const itemTotal = Number(item.preco) * item.quantity;
                     subtotal += itemTotal;
-                    html += `<li style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eee;">
-                        <span><strong>${item.name}</strong> <span style="color:#888;font-size:0.95em;">x${item.quantity}</span></span>
-                        <span style="color:#4caf50;font-weight:bold;">R$ ${itemTotal.toFixed(2).replace('.', ',')}</span>
-                    </li>`;
+                    orderItemsEl.innerHTML += `<div class="order-item"><img class="item-image" src="/images/uploads/${item.imagem || '../default-plate.jpg'}" alt="${item.nome}"><span class="item-name">${item.nome} (x${item.quantity})</span><span class="item-price">R$ ${itemTotal.toFixed(2).replace('.', ',')}</span></div>`;
                 });
-                html += '</ul>';
-                orderItemsEl.innerHTML = html;
             }
-            // Atualiza valores
+            updateTotals();
+        }
+
+        function applyCoupon() {
+            const couponCode = document.getElementById('cupomInput').value.toUpperCase();
+            const coupon = validCoupons[couponCode];
+            const feedbackEl = document.getElementById('couponFeedback');
+            if (coupon) {
+                if (coupon.type === "percentage") currentDiscount = subtotal * (coupon.value / 100);
+                else if (coupon.type === "fixed") currentDiscount = coupon.value;
+                feedbackEl.textContent = "Cupom aplicado com sucesso!";
+                feedbackEl.style.color = "#2e7d32";
+                document.getElementById('discountRow').style.display = 'flex';
+                document.getElementById('discountValue').textContent = `- R$ ${currentDiscount.toFixed(2).replace('.', ',')}`;
+            } else {
+                currentDiscount = 0;
+                feedbackEl.textContent = "Cupom inválido.";
+                feedbackEl.style.color = "#c0392b";
+                document.getElementById('discountRow').style.display = 'none';
+            }
+            updateTotals();
+        }
+
+        function updateTotals() {
+            let total = subtotal + taxaEntrega - currentDiscount;
+            if (total < 0) total = 0;
             document.getElementById('subtotalValor').textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
-            const taxaEntrega = 7.90;
             document.getElementById('taxaEntregaValor').textContent = `R$ ${taxaEntrega.toFixed(2).replace('.', ',')}`;
-            document.getElementById('totalValor').textContent = `R$ ${(subtotal + taxaEntrega).toFixed(2).replace('.', ',')}`;
+            document.getElementById('totalValor').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            renderOrderItems();
-        });
-        // Exibe apenas uma etapa por vez
-        function nextStep(step) {
-            if (step === 1) {
-                document.getElementById('stepResumo').style.display = 'none';
-                document.getElementById('stepEndereco').style.display = 'block';
-            } else if (step === 2) {
-                document.getElementById('stepEndereco').style.display = 'none';
-                document.getElementById('stepPagamento').style.display = 'block';
-            }
-        }
-        document.getElementById('formPagamento').addEventListener('submit', function(e) {
+        
+        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // Simula salvar cartão junto ao usuário
-            const tipo = document.getElementById('tipoPagamento').value;
-            const forma = document.getElementById('pagamento').value;
-            if ((tipo === 'site' || tipo === 'entrega') && forma === 'cartao') {
-                const cardData = {
-                    nome: document.getElementById('cardNome').value,
-                    numero: document.getElementById('cardNumber').value,
-                    validade: document.getElementById('cardExpiry').value,
-                    cvc: document.getElementById('cardCVC').value
+            const paymentMethod = document.getElementById('pagamento').value;
+            const totalValue = document.getElementById('totalValor').textContent.replace('R$ ', '');
+            
+            const fakeOrderNumber = 'VP' + Math.floor(10000 + Math.random() * 90000);
+
+            if (paymentMethod === 'pix') {
+                window.location.href = `/checkout/pix?total=${totalValue}`;
+            } else {
+                const successModal = document.getElementById('successModal');
+                const orderNumberEl = successModal.querySelector('.order-number strong');
+                const trackButton = successModal.querySelector('.submit-btn');
+
+                orderNumberEl.textContent = 'Número do Pedido: #' + fakeOrderNumber;
+                trackButton.onclick = function() {
+                    window.location.href = `/pedido/rastreio/${fakeOrderNumber}`;
                 };
-                // Aqui você salvaria no backend junto ao usuário logado
-                localStorage.setItem('userCard', JSON.stringify(cardData));
+                
+                successModal.style.display = 'flex';
+                localStorage.removeItem('cart');
             }
-            document.getElementById('successModal').style.display = 'flex';
         });
-        function closeSuccess() {
-            document.getElementById('successModal').style.display = 'none';
-        }
+
+        document.addEventListener('DOMContentLoaded', renderOrderItems);
     </script>
+
+
     <style>
-        .order-items-list ul {
-            margin-bottom: 0;
-        }
-        .order-items-list li {
-            font-size: 1.05em;
-        }
-        .checkout-steps-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 420px;
-            margin: 0 auto;
-        }
-        .checkout-step {
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(76,175,80,0.08);
-            padding: 40px 30px;
-            width: 100%;
-            margin-bottom: 30px;
-            text-align: left;
-            animation: fadeInStep 0.5s;
-        }
-        @keyframes fadeInStep {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .checkout-flex {
-            display: flex;
-            gap: 60px;
-            justify-content: center;
-            align-items: flex-start;
-            margin-top: 40px;
-        }
-        .checkout-form, .order-summary {
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(76,175,80,0.08);
-            padding: 40px 30px;
-            min-width: 340px;
-            max-width: 420px;
-            width: 100%;
-        }
-        .checkout-form {
-            flex: 1;
-        }
-        .order-summary {
-            flex: 1;
-        }
-        /* NOVO PADRÃO: expandir divs para ponta a ponta */
-        .checkout-form, .order-summary {
-            min-width: 0;
-            max-width: none;
-            width: 100%;
-            box-sizing: border-box;
-            text-align: left;
-        }
-        .checkout-flex {
-            justify-content: stretch;
-            align-items: stretch;
-            width: 100%;
-        }
-        @media (max-width: 900px) {
-            .checkout-flex {
-                flex-direction: column;
-                gap: 30px;
-                align-items: stretch;
-                width: 100%;
-            }
-            .checkout-form, .order-summary {
-                min-width: 0;
-                max-width: none;
-                padding: 30px 10px;
-                width: 100%;
-                box-sizing: border-box;
-                text-align: left;
-            }
-        }
-        .btn-voltar-inicio {
-            position: fixed;
-            top: 20px;
-            left: 30px;
-            z-index: 2001;
-        }
+        /* --- ESTILOS VISUAIS --- */
+        :root { --page-bg: #f8fdf8; --card-bg: #ffffff; --primary-green: #2e7d32; --accent-green: #4caf50; --light-green-bg: #e8f5e9; --border-color: #e0e0e0; --text-dark: #333; --text-light: #555; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; }
+        body { background-color: var(--page-bg); color: var(--text-dark); }
+        .btn-voltar { position: absolute; top: 25px; left: 25px; text-decoration: none; padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 25px; color: var(--text-light); background-color: var(--card-bg); font-weight: 500; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .btn-voltar:hover { background-color: #f5f5f5; border-color: #ccc; transform: translateY(-2px); }
+        .checkout-container { display: flex; justify-content: center; align-items: flex-start; gap: 40px; padding: 100px 20px 40px 20px; max-width: 1100px; margin: 0 auto; }
+        .order-summary-card, .form-section { background-color: var(--card-bg); border: 1px solid #e8f5e9; border-radius: 20px; padding: 30px; box-shadow: 0 8px 30px rgba(46, 125, 50, 0.08); animation: slideUp 0.6s ease-out forwards; }
+        .summary-title, .form-section-title { font-size: 22px; font-weight: 600; color: var(--primary-green); text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .order-items-list { margin-bottom: 20px; }
+        .order-item { display: flex; align-items: center; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+        .order-item:last-child { border-bottom: none; }
+        .item-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid #eee; margin-right: 15px; background-color: #f9f9f9; }
+        .item-name { flex-grow: 1; font-size: 15px; color: #444; }
+        .item-price { font-size: 15px; font-weight: 500; }
+        .coupon-section { display: flex; margin-top: 15px; border-top: 1px solid #eee; padding-top: 20px; }
+        .coupon-section input { flex-grow: 1; border: 1px solid var(--border-color); padding: 12px; border-radius: 8px 0 0 8px; font-size: 14px; transition: all 0.2s ease; background: var(--page-bg); }
+        .coupon-section input:focus { outline: none; border-color: var(--accent-green); box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1); }
+        .coupon-section button { background: var(--primary-green); color: white; border: none; padding: 12px 15px; border-radius: 0 8px 8px 0; cursor: pointer; font-weight: 500; transition: background 0.2s ease; }
+        .coupon-section button:hover { background: #256628; }
+        .coupon-feedback { font-size: 14px; margin-top: 8px; text-align: center; font-weight: 500; height: 1em; }
+        .discount-row { color: #c0392b; font-weight: 500; }
+        .summary-footer { padding-top: 20px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 15px; color: var(--text-light); }
+        .summary-row.total { font-size: 18px; font-weight: 600; color: var(--text-dark); margin-top: 15px; }
+        .empty-cart-message { text-align: center; color: #888; padding: 20px 0; }
+        .customer-details { width: 100%; max-width: 450px; animation-delay: 0.1s; }
+        .form-section { margin-bottom: 20px; }
+        .form-section-title { font-size: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 500; color: var(--text-light); margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 15px; transition: all 0.2s ease; background: var(--page-bg); }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent-green); box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1); }
+        .submit-btn { width: 100%; background: linear-gradient(135deg, var(--accent-green), var(--primary-green)); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2); }
+        .submit-btn:hover { background: var(--primary-green); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3); }
+        .success-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 100; justify-content: center; align-items: center; animation: fadeIn 0.3s forwards; }
+        .success-content { background: var(--card-bg); padding: 40px; border-radius: 20px; text-align: center; max-width: 380px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); animation: zoomIn 0.4s ease-out forwards; }
+        .success-icon { font-size: 40px; margin-bottom: 15px; }
+        .success-title { font-size: 22px; margin-bottom: 10px; color: var(--primary-green); }
+        .success-message { color: var(--text-light); margin-bottom: 15px; }
+        .order-number { font-size: 14px; color: var(--text-light); margin-bottom: 25px; }
+        @media (max-width: 900px) { .checkout-container { flex-direction: column; align-items: center; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
     </style>
 </body>
 </html>
