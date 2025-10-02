@@ -65,16 +65,21 @@
                     <% produtos.forEach((product, index) => { %>
                       <% if (product && product.id) { %>
                         <div class="product-card" data-category="<%= product.categoria_slug || 'sem-categoria' %>" style="animation-delay: <%= index * 0.05 %>s;">
-                            <img class="product-image" src="/images/default-plate.jpg" alt="<%= product.nome %>"/>
+                            <img class="product-image" 
+                                 src="/images/uploads/<%= product.imagem || '../default-plate.jpg' %>" 
+                                 alt="<%= product.nome %>"
+                                 onerror="this.onerror=null; this.src='/images/default-plate.jpg';"
+                            />
                             <div class="product-info">
                                 <h3 class="product-name"><%= product.emoji || '🍲' %> <%= product.nome || 'Produto Indisponível' %></h3>
                                 <p class="product-description"><%= product.descricao || 'Sem descrição.' %></p>
                                 <div class="product-footer">
                                     <span class="product-price">
-                                      <% if (typeof product.preco === 'number') { %>
-                                        R$ <%= product.preco.toFixed(2).replace('.', ',') %>
+                                      <% const price = Number(product.preco); %>
+                                      <% if (!isNaN(price) && price >= 0) { %>
+                                        R$ <%= price.toFixed(2).replace('.', ',') %>
                                       <% } else { %>
-                                        R$ 0,00
+                                        Consulte
                                       <% } %>
                                     </span>
                                     <button class="add-to-cart" onclick="addToCart(<%= product.id %>, this)">
@@ -96,8 +101,6 @@
     <%- include('partials/modals') %>
 
     <script>
-        // Esta linha é a forma correta de passar os dados do backend para o frontend.
-        // O erro do seu editor pode ser ignorado aqui.
         const allProducts = <%- JSON.stringify(produtos || []) %>;
     </script>
 

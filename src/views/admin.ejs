@@ -5,31 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vida no Prato - Colaborador</title>
     <link rel="stylesheet" href="/css/painel-admin.css">
-    <style>
-    /* ...estilos removidos, agora tudo usa painel-admin.css... */
-    </style>
 </head>
 <body>
-    <div id="authModal" class="auth-modal" style="display:flex;align-items:center;justify-content:center;">
+    <div id="authModal" class="auth-modal">
         <div class="auth-modal-content">
             <div class="auth-header">
-
-                <h2 id="authTitle">Acesso ao Painel Admin</h2>
-                <p>Faça login para acessar o painel.</p>
-
+                <h2 id="authTitle">🌱 Acesso ao Painel Admin</h2>
+                <p>Bem-vindo! Faça login para gerenciar.</p>
             </div>
             <div class="auth-body">
-                 <div class="auth-tabs">
-                    <button class="auth-tab active">Entrar</button>
-                </div>
                 <form class="auth-form active" id="loginForm">
                     <div class="form-group">
                         <label for="loginEmail">E-mail</label>
-                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" required value="admin@admin">
                     </div>
                     <div class="form-group">
                         <label for="loginPassword">Senha</label>
-                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required value="admin">
                         <span class="password-toggle" onclick="togglePassword('loginPassword')">👁️</span>
                     </div>
                     <button type="submit" class="auth-submit">Entrar na Conta</button>
@@ -37,6 +29,7 @@
             </div>
         </div>
     </div>
+
     <div id="adminPanelWrapper" style="display:none;">
         <header class="header">
             <a href="/" class="btn-voltar-inicio">← Voltar ao Início</a>
@@ -61,12 +54,18 @@
 
             <div class="tab-content active" id="products">
                 <h2 id="productFormTitle">Adicionar Produto</h2>
-                <form id="productForm" class="form-grid">
+                <form id="productForm" class="form-grid" enctype="multipart/form-data">
                     <input type="hidden" id="productIdEdit">
+                    <input type="hidden" id="productImageExisting">
                     <div class="form-group"><label>Nome *</label><input type="text" id="productName" required></div>
                     <div class="form-group"><label>Preço (R$) *</label><input type="number" step="0.01" id="productPrice" required></div>
                     <div class="form-group"><label>Categoria *</label><select id="productCategory" required></select></div>
                     <div class="form-group"><label>Ícone (Emoji) *</label><input type="text" id="productEmoji" required></div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Imagem do Produto (PNG, JPG, GIF)</label>
+                        <input type="file" id="productImage" name="imagem" accept="image/png, image/jpeg, image/gif">
+                        <div id="imagePreview" style="margin-top: 15px; font-size: 0.9em; color: #555;"></div>
+                    </div>
                     <div class="form-group" style="grid-column: 1 / -1;"><label>Descrição *</label><textarea id="productDescription" rows="3" required></textarea></div>
                     <div style="grid-column: 1 / -1;">
                         <button type="submit" class="btn" id="productSubmitBtn">✅ Adicionar Produto</button>
@@ -108,6 +107,7 @@
             </div>
         </div>
     </div>
+
     <script>
         // --- FUNÇÕES GLOBAIS ---
         function togglePassword(inputId) {
@@ -192,7 +192,7 @@
                 tr.innerHTML = `
                     <td>${cat.emoji || ''}</td>
                     <td>${cat.nome}</td>
-                    <td>${cat.chave}</td>
+                    <td>${cat.slug}</td>
                     <td>${cat.total_produtos || 0}</td>
                     <td>
                         <button class="btn btn-sm" onclick="editCategory(${cat.id})">✏️</button>
@@ -202,7 +202,6 @@
             });
         }
 
-        // --- FUNÇÕES CRUD (Edit/Delete) ---
         window.editProduct = async function(id) {
             const res = await fetch(`/produtos`);
             const produto = (await res.json()).find(p => p.id === id);
@@ -213,6 +212,13 @@
             document.getElementById('productCategory').value = produto.categoria_id;
             document.getElementById('productEmoji').value = produto.emoji;
             document.getElementById('productDescription').value = produto.descricao;
+            const imagePreview = document.getElementById('imagePreview');
+            if (produto.imagem) {
+                document.getElementById('productImageExisting').value = produto.imagem;
+                imagePreview.innerHTML = `<p>Imagem atual:</p><img src="/images/uploads/${produto.imagem}" width="100" style="border-radius: 8px;"/>`;
+            } else {
+                imagePreview.innerHTML = '<p>Nenhuma imagem cadastrada.</p>';
+            }
             document.getElementById('productFormTitle').textContent = 'Editar Produto';
             document.getElementById('productSubmitBtn').textContent = '💾 Salvar Alterações';
             document.getElementById('productCancelBtn').style.display = 'inline-block';
@@ -231,7 +237,7 @@
             if (!cat) return;
             document.getElementById('categoryIdEdit').value = cat.id;
             document.getElementById('categoryName').value = cat.nome;
-            document.getElementById('categoryKey').value = cat.chave;
+            document.getElementById('categoryKey').value = cat.slug;
             document.getElementById('categoryEmoji').value = cat.emoji;
             document.getElementById('categoryDescription').value = cat.descricao;
             document.getElementById('categoryFormTitle').textContent = 'Editar Categoria';
@@ -247,7 +253,6 @@
             }
         };
 
-        // --- INICIALIZAÇÃO E LÓGICA DE LOGIN ---
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loginForm').addEventListener('submit', function(event) {
                 event.preventDefault();
@@ -267,17 +272,23 @@
             document.getElementById('productForm').onsubmit = async function(e) {
                 e.preventDefault();
                 const id = document.getElementById('productIdEdit').value;
-                const payload = {
-                    nome: document.getElementById('productName').value,
-                    preco: document.getElementById('productPrice').value,
-                    categoria_id: document.getElementById('productCategory').value,
-                    emoji: document.getElementById('productEmoji').value,
-                    descricao: document.getElementById('productDescription').value
-                };
-                await fetch(id ? `/produtos/${id}` : '/produtos', {
-                    method: id ? 'PUT' : 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                const formData = new FormData();
+                formData.append('nome', document.getElementById('productName').value);
+                formData.append('preco', document.getElementById('productPrice').value);
+                formData.append('categoria_id', document.getElementById('productCategory').value);
+                formData.append('emoji', document.getElementById('productEmoji').value);
+                formData.append('descricao', document.getElementById('productDescription').value);
+                const imageFile = document.getElementById('productImage').files[0];
+                if (imageFile) {
+                    formData.append('imagem', imageFile);
+                } else if (id) {
+                    formData.append('imagem_existente', document.getElementById('productImageExisting').value);
+                }
+                const url = id ? `/produtos/${id}` : '/produtos';
+                const method = id ? 'PUT' : 'POST';
+                await fetch(url, {
+                    method: method,
+                    body: formData
                 });
                 document.getElementById('productCancelBtn').click();
                 displayProducts();
@@ -305,6 +316,8 @@
             document.getElementById('productCancelBtn').onclick = function() {
                 this.form.reset();
                 document.getElementById('productIdEdit').value = '';
+                document.getElementById('imagePreview').innerHTML = '';
+                document.getElementById('productImageExisting').value = '';
                 document.getElementById('productFormTitle').textContent = 'Adicionar Produto';
                 document.getElementById('productSubmitBtn').textContent = '✅ Adicionar Produto';
                 this.style.display = 'none';

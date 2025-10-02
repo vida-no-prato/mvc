@@ -2,7 +2,7 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 // A variável 'allProducts' é inicializada no arquivo index.ejs (injetada pelo servidor).
 
-// --- FUNÇÕES DE AUTENTICAÇÃO E MODAIS (sem alterações) ---
+// --- FUNÇÕES DE AUTENTICAÇÃO E MODAIS ---
 function openAuthModal() { document.getElementById('authModal').style.display = 'block'; }
 function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
 function switchTab(tabName){
@@ -19,10 +19,6 @@ function togglePassword(inputId){
 
 // --- LÓGICA DE PRODUTOS E FILTROS ---
 
-/**
- * Filtra os produtos visíveis na página com base na categoria.
- * @param {string} category O slug da categoria para filtrar.
- */
 function filterProducts(category) {
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
@@ -39,11 +35,6 @@ function filterProducts(category) {
 
 // --- LÓGICA DO CARRINHO ---
 
-/**
- * Adiciona um item ao carrinho e atualiza a interface.
- * @param {number} productId O ID do produto a ser adicionado.
- * @param {HTMLElement} btn O botão que foi clicado.
- */
 function addToCart(productId, btn) {
     const product = allProducts.find(p => p.id === productId);
     if (!product) return;
@@ -58,20 +49,16 @@ function addToCart(productId, btn) {
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 
-    // Feedback visual no botão
     btn.disabled = true;
     btn.textContent = 'Adicionado!';
     btn.style.background = '#2e7d32';
     setTimeout(() => {
         btn.disabled = false;
         btn.textContent = 'Adicionar';
-        btn.style.background = ''; // Volta ao estilo original do CSS
+        btn.style.background = '';
     }, 1200);
 }
 
-/**
- * Atualiza o contador de itens no ícone do carrinho.
- */
 function updateCartCount() {
     const cartCountEl = document.getElementById('cartCount');
     const count = cart.reduce((total, item) => total + item.quantity, 0);
@@ -85,7 +72,8 @@ function updateCartCount() {
 }
 
 /**
- * Abre o modal do carrinho e exibe os itens.
+ * ATUALIZAÇÃO PRINCIPAL AQUI
+ * Abre o modal do carrinho e exibe os itens usando as propriedades corretas.
  */
 function openCart() {
     const modal = document.getElementById('cartModal');
@@ -93,16 +81,17 @@ function openCart() {
     const totalEl = document.getElementById('cartTotal');
     let total = 0;
 
-    itemsEl.innerHTML = ''; // Limpa a lista
+    itemsEl.innerHTML = ''; 
     if (cart.length === 0) {
-        itemsEl.innerHTML = '<p class="empty-cart-message">Seu carrinho está vazio</p>';
+        itemsEl.innerHTML = '<p style="text-align:center; padding: 20px; color: #666;">Seu carrinho está vazio</p>';
     } else {
         cart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
+            // CORREÇÃO: Usando Number(item.preco) e item.nome
+            const itemTotal = Number(item.preco) * item.quantity;
             total += itemTotal;
             itemsEl.innerHTML += `
                 <div class="cart-item">
-                    <div><strong>${item.name}</strong><br><small>Qtd: ${item.quantity}</small></div>
+                    <div><strong>${item.nome}</strong><br><small>Qtd: ${item.quantity}</small></div>
                     <strong>R$ ${itemTotal.toFixed(2).replace('.', ',')}</strong>
                 </div>`;
         });
