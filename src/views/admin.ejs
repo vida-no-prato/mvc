@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vida no Prato - Colaborador</title>
     <link rel="stylesheet" href="/css/painel-admin.css">
 </head>
+
 <body>
     <div id="authModal" class="auth-modal">
         <div class="auth-modal-content">
@@ -35,7 +37,8 @@
             <a href="/" class="btn-voltar-inicio">← Voltar ao Início</a>
             <h1 style="text-align:center;margin-top:32px;">🌱 Vida no Prato - Painel Admin</h1>
             <p style="text-align:center;">Gerencie seus produtos e categorias</p>
-            <div id="welcomeAnimation" style="display:none;position:fixed;bottom:30px;right:30px;z-index:2000;min-width:340px;padding:22px 32px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(46,125,50,0.18);font-size:1.25rem;">
+            <div id="welcomeAnimation"
+                style="display:none;position:fixed;bottom:30px;right:30px;z-index:2000;min-width:340px;padding:22px 32px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(46,125,50,0.18);font-size:1.25rem;">
                 <span style="font-size:1.7rem;vertical-align:middle;margin-right:10px;">🌱</span>
                 Bem-vindo ao painel administrativo!
             </div>
@@ -43,8 +46,14 @@
 
         <div class="container">
             <div class="stats">
-                <div class="stat-card"><div class="stat-number" id="totalProducts">0</div><div>Produtos</div></div>
-                <div class="stat-card"><div class="stat-number" id="totalCategories">0</div><div>Categorias</div></div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalProducts">0</div>
+                    <div>Produtos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCategories">0</div>
+                    <div>Categorias</div>
+                </div>
             </div>
 
             <div class="tabs">
@@ -58,22 +67,35 @@
                     <input type="hidden" id="productIdEdit">
                     <input type="hidden" id="productImageExisting">
                     <div class="form-group"><label>Nome *</label><input type="text" id="productName" required></div>
-                    <div class="form-group"><label>Preço (R$) *</label><input type="number" step="0.01" id="productPrice" required></div>
-                    <div class="form-group"><label>Categoria *</label><select id="productCategory" required></select></div>
-                    <div class="form-group"><label>Ícone (Emoji) *</label><input type="text" id="productEmoji" required></div>
+                    <div class="form-group"><label>Preço (R$) *</label><input type="number" step="0.01"
+                            id="productPrice" required></div>
+                    <div class="form-group"><label>Categoria *</label><select id="productCategory" required></select>
+                    </div>
+                    <div class="form-group"><label>Ícone (Emoji) *</label><input type="text" id="productEmoji" required>
+                    </div>
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label>Imagem do Produto (PNG, JPG, GIF)</label>
                         <input type="file" id="productImage" name="imagem" accept="image/png, image/jpeg, image/gif">
                         <div id="imagePreview" style="margin-top: 15px; font-size: 0.9em; color: #555;"></div>
                     </div>
-                    <div class="form-group" style="grid-column: 1 / -1;"><label>Descrição *</label><textarea id="productDescription" rows="3" required></textarea></div>
+                    <div class="form-group" style="grid-column: 1 / -1;"><label>Descrição *</label><textarea
+                            id="productDescription" rows="3" required></textarea></div>
                     <div style="grid-column: 1 / -1;">
                         <button type="submit" class="btn" id="productSubmitBtn">✅ Adicionar Produto</button>
-                        <button type="button" class="btn" id="productCancelBtn" style="display:none;background:#ccc;color:#333;margin-left:10px;">Cancelar</button>
+                        <button type="button" class="btn" id="productCancelBtn"
+                            style="display:none;background:#ccc;color:#333;margin-left:10px;">Cancelar</button>
                     </div>
                 </form>
                 <table class="data-table" id="productsTable">
-                    <thead><tr><th>Ícone</th><th>Nome</th><th>Categoria</th><th>Preço</th><th>Ações</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Ícone</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -90,18 +112,39 @@
                         <div class="emoji-grid">
                             <button type="button" class="emoji-btn" data-emoji="🥗">🥗</button>
                             <button type="button" class="emoji-btn" data-emoji="🍲">🍲</button>
-                            <button type="button" class="emoji-btn" data-emoji="🥤">🥤</button>
                             <button type="button" class="emoji-btn" data-emoji="🌯">🌯</button>
+                            <button type="button" class="emoji-btn" data-emoji="🥪">🥪</button>
+                            <button type="button" class="emoji-btn" data-emoji="🍕">🍕</button>
+                            <button type="button" class="emoji-btn" data-emoji="🍝">🍝</button>
+                            <button type="button" class="emoji-btn" data-emoji="🍜">🍜</button>
+                            <button type="button" class="emoji-btn" data-emoji="🍣">🍣</button>
+                            <button type="button" class="emoji-btn" data-emoji="🥤">🥤</button>
+                            <button type="button" class="emoji-btn" data-emoji="☕">☕</button>
+                            <button type="button" class="emoji-btn" data-emoji="🍰">🍰</button>
+                            <button type="button" class="emoji-btn" data-emoji="🍉">🍉</button>
+                            <button type="button" class="emoji-btn" data-emoji="🥑">🥑</button>
+                            <button type="button" class="emoji-btn" data-emoji="🥕">🥕</button>
+                            <button type="button" class="emoji-btn" data-emoji="🥦">🥦</button>
                         </div>
                     </div>
-                    <div class="form-group" style="grid-column: 1 / -1;"><label>Descrição *</label><textarea id="categoryDescription" rows="3" required></textarea></div>
+                    <div class="form-group" style="grid-column: 1 / -1;"><label>Descrição *</label><textarea
+                            id="categoryDescription" rows="3" required></textarea></div>
                     <div style="grid-column: 1 / -1;">
                         <button type="submit" class="btn" id="categorySubmitBtn">✅ Adicionar Categoria</button>
-                        <button type="button" class="btn" id="categoryCancelBtn" style="display:none;background:#ccc;color:#333;margin-left:10px;">Cancelar</button>
+                        <button type="button" class="btn" id="categoryCancelBtn"
+                            style="display:none;background:#ccc;color:#333;margin-left:10px;">Cancelar</button>
                     </div>
                 </form>
                 <table class="data-table" id="categoriesTable">
-                    <thead><tr><th>Ícone</th><th>Nome</th><th>Chave</th><th>Produtos</th><th>Ações</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>Ícone</th>
+                            <th>Nome</th>
+                            <th>Chave</th>
+                            <th>Produtos</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -138,7 +181,7 @@
 
         function setupEmojiPickers() {
             document.querySelectorAll('.emoji-btn').forEach(btn => {
-                btn.onclick = function() {
+                btn.onclick = function () {
                     const input = this.closest('.form-group').querySelector('input[type="hidden"]');
                     input.value = this.dataset.emoji;
                     this.closest('.emoji-grid').querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
@@ -202,7 +245,7 @@
             });
         }
 
-        window.editProduct = async function(id) {
+        window.editProduct = async function (id) {
             const res = await fetch(`/produtos`);
             const produto = (await res.json()).find(p => p.id === id);
             if (!produto) return;
@@ -224,14 +267,14 @@
             document.getElementById('productCancelBtn').style.display = 'inline-block';
         };
 
-        window.deleteProduct = async function(id) {
+        window.deleteProduct = async function (id) {
             if (confirm('Tem certeza que deseja excluir este produto?')) {
                 await fetch(`/produtos/${id}`, { method: 'DELETE' });
                 displayProducts();
             }
         };
 
-        window.editCategory = async function(id) {
+        window.editCategory = async function (id) {
             const res = await fetch(`/categorias`);
             const cat = (await res.json()).find(c => c.id === id);
             if (!cat) return;
@@ -245,7 +288,7 @@
             document.getElementById('categoryCancelBtn').style.display = 'inline-block';
         };
 
-        window.deleteCategory = async function(id) {
+        window.deleteCategory = async function (id) {
             if (confirm('Tem certeza que deseja excluir esta categoria?')) {
                 await fetch(`/categorias/${id}`, { method: 'DELETE' });
                 populateCategories();
@@ -253,8 +296,8 @@
             }
         };
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('loginForm').addEventListener('submit', function(event) {
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('loginForm').addEventListener('submit', function (event) {
                 event.preventDefault();
                 if (document.getElementById('loginEmail').value === 'admin@admin' && document.getElementById('loginPassword').value === 'admin') {
                     document.getElementById('authModal').style.display = 'none';
@@ -269,7 +312,7 @@
                 }
             });
 
-            document.getElementById('productForm').onsubmit = async function(e) {
+            document.getElementById('productForm').onsubmit = async function (e) {
                 e.preventDefault();
                 const id = document.getElementById('productIdEdit').value;
                 const formData = new FormData();
@@ -294,7 +337,7 @@
                 displayProducts();
             };
 
-            document.getElementById('categoryForm').onsubmit = async function(e) {
+            document.getElementById('categoryForm').onsubmit = async function (e) {
                 e.preventDefault();
                 const id = document.getElementById('categoryIdEdit').value;
                 const payload = {
@@ -313,7 +356,7 @@
                 displayCategories();
             };
 
-            document.getElementById('productCancelBtn').onclick = function() {
+            document.getElementById('productCancelBtn').onclick = function () {
                 this.form.reset();
                 document.getElementById('productIdEdit').value = '';
                 document.getElementById('imagePreview').innerHTML = '';
@@ -323,7 +366,7 @@
                 this.style.display = 'none';
             };
 
-            document.getElementById('categoryCancelBtn').onclick = function() {
+            document.getElementById('categoryCancelBtn').onclick = function () {
                 this.form.reset();
                 document.getElementById('categoryIdEdit').value = '';
                 document.getElementById('categoryFormTitle').textContent = 'Adicionar Categoria';
@@ -333,4 +376,5 @@
         });
     </script>
 </body>
+
 </html>
