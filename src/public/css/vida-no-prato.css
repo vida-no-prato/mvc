@@ -1400,5 +1400,66 @@ body {
     }
 }
 
+/* --- ESTILOS DO MODAL DE DETALHES DO PRODUTO --- */
+.product-detail-content {
+    max-width: 700px;
+    padding: 0;
+    text-align: left;
+}
 
+.product-detail-content .modal-product-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 20px 20px 0 0;
+}
 
+.modal-product-info {
+    padding: 30px;
+}
+
+.modal-product-name {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 15px;
+}
+
+.modal-product-description {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.modal-product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.modal-product-price {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+/* Deixa o botão 'Adicionar' do modal igual ao do card */
+.modal-add-to-cart {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.modal-add-to-cart:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+}
