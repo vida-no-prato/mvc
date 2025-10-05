@@ -1,20 +1,24 @@
 // Variáveis globais
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
-// A variável 'allProducts' é inicializada no arquivo index.ejs (injetada pelo servidor).
+// A variável 'allProducts' é inicializada no ficheiro index.ejs (injetada pelo servidor).
 
 // --- FUNÇÕES DE AUTENTICAÇÃO E MODAIS ---
 function openAuthModal() { document.getElementById('authModal').style.display = 'block'; }
 function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+
 function switchTab(tabName){
     document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
     // Encontra o botão pelo atributo e adiciona a classe 'active'
-    document.querySelector(`.auth-tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+    const buttonToActivate = document.querySelector(`.auth-tab[onclick="switchTab('${tabName}')"]`);
+    if(buttonToActivate) buttonToActivate.classList.add('active');
+
     document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
     document.getElementById(tabName === 'login' ? 'loginForm' : 'registerForm').classList.add('active');
 }
+
 function togglePassword(inputId){
-    const i=document.getElementById(inputId);
-    i.type=i.type==='password'?'text':'password';
+    const i = document.getElementById(inputId);
+    i.type = i.type === 'password' ? 'text' : 'password';
 }
 
 // --- LÓGICA DE PRODUTOS E FILTROS ---
@@ -47,14 +51,16 @@ function addToCart(productId, btn) {
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 
-    btn.disabled = true;
-    btn.textContent = 'Adicionado!';
-    btn.style.background = '#2e7d32';
-    setTimeout(() => {
-        btn.disabled = false;
-        btn.textContent = 'Adicionar';
-        btn.style.background = '';
-    }, 1200);
+    if(btn) {
+        btn.disabled = true;
+        btn.textContent = 'Adicionado!';
+        btn.style.background = '#2e7d32';
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = 'Adicionar';
+            btn.style.background = '';
+        }, 1200);
+    }
 }
 
 function updateCartCount() {
@@ -77,7 +83,7 @@ function openCart() {
 
     itemsEl.innerHTML = ''; 
     if (cart.length === 0) {
-        itemsEl.innerHTML = '<p style="text-align:center; padding: 20px; color: #666;">Seu carrinho está vazio</p>';
+        itemsEl.innerHTML = '<p style="text-align:center; padding: 20px; color: #666;">O seu carrinho está vazio</p>';
     } else {
         cart.forEach(item => {
             const itemTotal = Number(item.preco) * item.quantity;
@@ -100,7 +106,7 @@ function closeCart() {
 
 function checkout() {
     if (cart.length === 0) {
-        alert('Seu carrinho está vazio!');
+        alert('O seu carrinho está vazio!');
         return;
     }
     window.location.href = '/checkout';
@@ -134,7 +140,46 @@ function toggleDropdown() {
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
 
-// --- INICIALIZAÇÃO ---
+function showOrders() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.id) {
+        window.location.href = `/pedido/meus-pedidos/${user.id}`;
+    } else {
+        alert('Faça login para ver os seus pedidos.');
+        openAuthModal();
+    }
+}
+
+// --- LÓGICA DO MODAL DE DETALHES DO PRODUTO ---
+function showProductDetails(product) {
+    const modal = document.getElementById('productDetailModal');
+    const content = document.getElementById('modalProductContent');
+    const formattedPrice = `R$ ${Number(product.preco).toFixed(2).replace('.', ',')}`;
+
+    content.innerHTML = `
+        <img src="/images/uploads/${product.imagem || '../default-plate.jpg'}" 
+             alt="${product.nome}" 
+             class="modal-product-image"
+             onerror="this.onerror=null; this.src='/images/default-plate.jpg';">
+        <div class="modal-product-info">
+            <h2 class="modal-product-name">${product.emoji || '🍲'} ${product.nome}</h2>
+            <p class="modal-product-description">${product.descricao}</p>
+            <div class="modal-product-footer">
+                <span class="modal-product-price">${formattedPrice}</span>
+                <button class="modal-add-to-cart" onclick="addToCart(${product.id}, this)">
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+        </div>
+    `;
+    modal.style.display = 'block';
+}
+
+function closeProductModal() {
+    document.getElementById('productDetailModal').style.display = 'none';
+}
+
+// --- INICIALIZAÇÃO E EVENT LISTENERS ---
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
 
@@ -142,8 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateUserUI(loggedUser);
 
     const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-
     if(loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -167,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const registerForm = document.getElementById('registerForm');
     if(registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -197,21 +241,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-// (Adicione esta função dentro de script.js)
 
-function showOrders() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.id) {
-        window.location.href = `/pedido/meus-pedidos/${user.id}`;
-    } else {
-        alert('Faça login para ver seus pedidos.');
-        openAuthModal();
-    }
-}
 // Fecha modais ao clicar no fundo
 window.addEventListener('click', (event) => {
-    if (event.target.classList.contains('modal') || event.target.classList.contains('auth-modal')) {
+    if (event.target.classList.contains('modal')) {
         closeCart();
         closeAuthModal();
+        closeProductModal();
     }
 });
