@@ -9,7 +9,7 @@ router.get('/rastreio/:id', (req, res) => {
 });
 
 // NOVA ROTA ADICIONADA PARA CORRIGIR O ERRO 404
-// Rota para a página de histórico de pedidos do usuário
+// Rota para a página de histórico de pedidos do usuári
 router.get('/meus-pedidos/:usuarioId', async (req, res) => {
     try {
         const { usuarioId } = req.params;
