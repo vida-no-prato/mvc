@@ -47,24 +47,25 @@
                 <div class="form-section">
                     <h3 class="form-section-title">Endereço de Entrega</h3>
                     <div class="form-group"><label for="cep">CEP</label><input type="text" id="cep" name="cep" required placeholder="00000-000"></div>
-                    <div class="form-group"><label for="endereco">Endereço Completo</label><input type="text" id="endereco" name="endereco" required placeholder="Rua, número, complemento"></div>
+                    <div class="form-group"><label for="endereco">Endereço</label><input type="text" id="endereco" name="endereco" required placeholder="Rua, Avenida..."></div>
+                    <div class="form-group"><label for="numero">Número</label><input type="text" id="numero" name="numero" required placeholder="Ex: 123"></div>
+                    <div class="form-group"><label for="bairro">Bairro</label><input type="text" id="bairro" name="bairro" required placeholder="Seu bairro"></div>
                     <div class="form-group"><label for="cidade">Cidade</label><input type="text" id="cidade" name="cidade" required placeholder="Sua cidade"></div>
                 </div>
 
                 <div class="form-section">
-                    <h3 class="form-section-title">Forma de Pagamento</h3>
-                    <div class="form-group">
-                        <label for="pagamento">Como deseja pagar?</label>
-                        <select id="pagamento" name="pagamento" required>
-                            <option value="">Escolha uma opção...</option>
-                            <option value="cartao">Cartão de Crédito/Débito</option>
-                            <option value="pix">Pix</option>
-                            <option value="dinheiro">Dinheiro (na entrega)</option>
-                        </select>
-                    </div>
-                </div>
+    <h3 class="form-section-title">Forma de Pagamento</h3>
+    <div class="form-group">
+        <label for="pagamento">Como deseja pagar?</label>
+        
+        <select id="pagamento" name="pagamento" required>
+            <option value="">Escolha uma opção...</option>
+            <option value="credit">Cartão de Crédito/Débito</option> <option value="pix">Pix</option>
+            <option value="cash">Dinheiro (na entrega)</option> </select>
+        </div>
+</div>
 
-                <button class="submit-btn" type="submit">Finalizar Pedido</button>
+<button class="submit-btn" type="submit">Finalizar Pedido</button>
             </form>
         </div>
     </div>
@@ -134,31 +135,75 @@
             document.getElementById('totalValor').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
         
-        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || !user.id) {
+                alert('Você precisa estar logado para finalizar o pedido!');
+                return;
+            }
+
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio.');
+                return;
+            }
+
             const paymentMethod = document.getElementById('pagamento').value;
-            const totalValue = document.getElementById('totalValor').textContent.replace('R$ ', '');
+            const subtotalValue = parseFloat(document.getElementById('subtotalValor').textContent.replace('R$ ', '').replace(',', '.'));
+            const deliveryFee = parseFloat(document.getElementById('taxaEntregaValor').textContent.replace('R$ ', '').replace(',', '.'));
+            const totalValue = parseFloat(document.getElementById('totalValor').textContent.replace('R$ ', '').replace(',', '.'));
             
-            const fakeOrderNumber = 'VP' + Math.floor(10000 + Math.random() * 90000);
+            const endereco = {
+                cep: document.getElementById('cep').value,
+                endereco: document.getElementById('endereco').value,
+                numero: document.getElementById('numero').value,
+                bairro: document.getElementById('bairro').value,
+                cidade: document.getElementById('cidade').value
+            };
 
             if (paymentMethod === 'pix') {
-                window.location.href = `/checkout/pix?total=${totalValue}`;
-            } else {
+                window.location.href = `/checkout/pix?total=${totalValue.toFixed(2).replace('.', ',')}`;
+                return;
+            }
+
+            const response = await fetch('/checkout/finalizar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    usuario_id: user.id,
+                    subtotal: subtotalValue,
+                    taxa_entrega: deliveryFee,
+                    total: totalValue,
+                    metodo_pagamento: paymentMethod,
+                    endereco: endereco,
+                    cart: cart
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
                 const successModal = document.getElementById('successModal');
                 const orderNumberEl = successModal.querySelector('.order-number strong');
                 const trackButton = successModal.querySelector('.submit-btn');
 
-                orderNumberEl.textContent = 'Número do Pedido: #' + fakeOrderNumber;
+                orderNumberEl.textContent = 'Pedido: #' + result.numero_pedido;
                 trackButton.onclick = function() {
-                    window.location.href = `/pedido/rastreio/${fakeOrderNumber}`;
+                    window.location.href = `/pedido/rastreio/${result.numero_pedido}`;
                 };
                 
                 successModal.style.display = 'flex';
                 localStorage.removeItem('cart');
+            } else {
+                alert('Houve um erro ao processar seu pedido. Tente novamente.');
             }
         });
 
+        // ADICIONE ESTA LINHA PARA CORRIGIR O PROBLEMA
         document.addEventListener('DOMContentLoaded', renderOrderItems);
+        
     </script>
 
 
