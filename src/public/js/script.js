@@ -37,7 +37,12 @@ function filterProducts(category) {
 }
 
 // --- LÓGICA DO CARRINHO ---
-function addToCart(productId, btn) {
+function addToCart(event, productId, btn) {
+    // CORREÇÃO: Impede que o clique se propague para o elemento pai (o card).
+    if (event) {
+        event.stopPropagation();
+    }
+
     const product = allProducts.find(p => p.id === productId);
     if (!product) return;
 
@@ -57,11 +62,13 @@ function addToCart(productId, btn) {
         btn.style.background = '#2e7d32';
         setTimeout(() => {
             btn.disabled = false;
-            btn.textContent = 'Adicionar';
+            // CORREÇÃO: O texto original do botão no modal é "Adicionar ao Carrinho"
+            btn.textContent = btn.classList.contains('modal-add-to-cart') ? 'Adicionar ao Carrinho' : 'Adicionar';
             btn.style.background = '';
         }, 1200);
     }
 }
+
 
 function updateCartCount() {
     const cartCountEl = document.getElementById('cartCount');
@@ -166,7 +173,7 @@ function showProductDetails(product) {
             <p class="modal-product-description">${product.descricao}</p>
             <div class="modal-product-footer">
                 <span class="modal-product-price">${formattedPrice}</span>
-                <button class="modal-add-to-cart" onclick="addToCart(${product.id}, this)">
+                <button class="modal-add-to-cart" onclick="addToCart(event, ${product.id}, this)">
                     Adicionar ao Carrinho
                 </button>
             </div>

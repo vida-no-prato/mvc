@@ -77,14 +77,15 @@
                     <% produtos.forEach((product, index) => { %>
                         <% if (product && product.id) { %>
                         <div class="product-card" 
-     data-category="<%= product.categoria_slug || 'sem-categoria' %>" 
-     style="animation-delay: <%= index * 0.05 %>s;"
-     onclick='showProductDetails(<%- JSON.stringify(product) %>)'>
+                             data-category="<%= product.categoria_slug || 'sem-categoria' %>" 
+                             style="animation-delay: <%= index * 0.05 %>s;"
+                             onclick='showProductDetails(<%- JSON.stringify(product) %>)'>
+                            
                             <img class="product-image" 
                                  src="/images/uploads/<%= product.imagem || '../default-plate.jpg' %>" 
                                  alt="<%= product.nome %>"
-                                 onerror="this.onerror=null; this.src='/images/default-plate.jpg';"
-                            />
+                                 onerror="this.onerror=null; this.src='/images/default-plate.jpg';">
+
                             <div class="product-info">
                                 <h3 class="product-name"><%= product.emoji || '🍲' %> <%= product.nome || 'Produto Indisponível' %></h3>
                                 <p class="product-description"><%= product.descricao || 'Sem descrição.' %></p>
@@ -97,7 +98,7 @@
                                         Consulte
                                         <% } %>
                                     </span>
-                                    <button class="add-to-cart" onclick="addToCart(<%= product.id %>, this)">
+                                    <button class="add-to-cart" onclick="addToCart(event, <%= product.id %>, this)">
                                         Adicionar
                                     </button>
                                 </div>
@@ -111,24 +112,22 @@
                 </div>
             </section>
         </div>
-        <%- include('partials/modals') %>
-
-<div id="productDetailModal" class="modal">
-    <div class="modal-content product-detail-content">
-        <span class="close" onclick="closeProductModal()">&times;</span>
-        <div id="modalProductContent">
-            </div>
-    </div>
-</div>
     </main>
 
     <%- include('partials/modals') %>
-    
+
+    <div id="productDetailModal" class="modal">
+        <div class="modal-content product-detail-content">
+            <span class="close" onclick="closeProductModal()">&times;</span>
+            <div id="modalProductContent">
+                </div>
+        </div>
+    </div>
 
     <script>
+        // A variável allProducts é definida aqui, antes de carregar o script.js
         const allProducts = <%- JSON.stringify(produtos || []) %>;
     </script>
-
     <script src="/js/script.js"></script>
 
     <style>
