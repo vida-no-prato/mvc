@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= title %>
-    </title>
+    <title><%= title %></title>
     <link rel="stylesheet" href="/css/vida-no-prato.css">
 </head>
-
 <body>
     <button class="cart-btn admin-btn-fixo" onclick="window.location.href='/admin'">Para Colaboradores</button>
 
@@ -54,8 +50,7 @@
                 <div class="hero-content">
                     <h1>Comida Saudável, Sabor Incrível</h1>
                     <p>Descubra pratos deliciosos e nutritivos, entregues fresquinhos na sua porta</p>
-                    <button class="cta-btn"
-                        onclick="document.getElementById('produtos').scrollIntoView({behavior: 'smooth'})">
+                    <button class="cta-btn" onclick="document.getElementById('produtos').scrollIntoView({behavior: 'smooth'})">
                         Explorar Cardápio
                     </button>
                 </div>
@@ -64,116 +59,85 @@
             <section class="products" id="produtos">
                 <h2 class="section-title">Nosso Cardápio</h2>
 
-                <% if (typeof categorias !=='undefined' && categorias.length> 0) { %>
-                    <div class="filter-bar" id="filterBar">
-                        <button class="filter-btn active" onclick="filterProducts('todos')">Todos</button>
-                        <% categorias.forEach(categoria=> { %>
-                            <% if (categoria && categoria.slug && categoria.nome) { %>
-                                <button class="filter-btn" onclick="filterProducts('<%= categoria.slug %>')">
-                                    <%= categoria.emoji || '🥗' %>
-                                        <%= categoria.nome %>
-                                </button>
-                                <% } %>
-                                    <% }) %>
-                    </div>
-                    <% } %>
+                <% if (typeof categorias !== 'undefined' && categorias.length > 0) { %>
+                <div class="filter-bar" id="filterBar">
+                    <button class="filter-btn active" onclick="filterProducts('todos')">Todos</button>
+                    <% categorias.forEach(categoria => { %>
+                        <% if (categoria && categoria.slug && categoria.nome) { %>
+                            <button class="filter-btn" onclick="filterProducts('<%= categoria.slug %>')">
+                                <%= categoria.emoji || '🥗' %> <%= categoria.nome %>
+                            </button>
+                        <% } %>
+                    <% }) %>
+                </div>
+                <% } %>
 
-                        <div class="products-grid" id="productsGrid">
-                            <% if (typeof produtos !=='undefined' && produtos.length> 0) { %>
-                                <% produtos.forEach((product, index)=> { %>
-                                    <% if (product && product.id) { %>
-                                        <div class="product-card"
-                                            data-category="<%= product.categoria_slug || 'sem-categoria' %>"
-                                            style="animation-delay: <%= index * 0.05 %>s;"
-                                            onclick='showProductDetails(<%- JSON.stringify(product) %>)'>
-                                            <img class="product-image"
-                                                src="/images/uploads/<%= product.imagem || '../default-plate.jpg' %>"
-                                                alt="<%= product.nome %>"
-                                                onerror="this.onerror=null; this.src='/images/default-plate.jpg';" />
-                                            <div class="product-info">
-                                                <h3 class="product-name">
-                                                    <%= product.emoji || '🍲' %>
-                                                        <%= product.nome || 'Produto Indisponível' %>
-                                                </h3>
-                                                <p class="product-description">
-                                                    <%= product.descricao || 'Sem descrição.' %>
-                                                </p>
-                                                <div class="product-footer">
-                                                    <span class="product-price">
-                                                        <% const price=Number(product.preco); %>
-                                                            <% if (!isNaN(price) && price>= 0) { %>
-                                                                R$ <%= price.toFixed(2).replace('.', ',' ) %>
-                                                                    <% } else { %>
-                                                                        Consulte
-                                                                        <% } %>
-                                                    </span>
-                                                    <button class="add-to-cart"
-                                                        onclick="addToCart(<%= product.id %>, this)">
-                                                        Adicionar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+                <div class="products-grid" id="productsGrid">
+                  <% if (typeof produtos !== 'undefined' && produtos.length > 0) { %>
+                    <% produtos.forEach((product, index) => { %>
+                        <% if (product && product.id) { %>
+                        <div class="product-card" 
+                             data-category="<%= product.categoria_slug || 'sem-categoria' %>" 
+                             style="animation-delay: <%= index * 0.05 %>s;"
+                             onclick='showProductDetails(<%- JSON.stringify(product) %>)'>
+                            
+                            <img class="product-image" 
+                                 src="/images/uploads/<%= product.imagem || '../default-plate.jpg' %>" 
+                                 alt="<%= product.nome %>"
+                                 onerror="this.onerror=null; this.src='/images/default-plate.jpg';">
+
+                            <div class="product-info">
+                                <h3 class="product-name"><%= product.emoji || '🍲' %> <%= product.nome || 'Produto Indisponível' %></h3>
+                                <p class="product-description"><%= product.descricao || 'Sem descrição.' %></p>
+                                <div class="product-footer">
+                                    <span class="product-price">
+                                        <% const price = Number(product.preco); %>
+                                        <% if (!isNaN(price) && price >= 0) { %>
+                                        R$ <%= price.toFixed(2).replace('.', ',') %>
+                                        <% } else { %>
+                                        Consulte
                                         <% } %>
-                                            <% }) %>
-                                                <% } else { %>
-                                                    <p style="text-align: center; width: 100%;">Nenhum produto
-                                                        cadastrado no momento. Volte em breve!</p>
-                                                    <% } %>
+                                    </span>
+                                    <button class="add-to-cart" onclick="addToCart(event, <%= product.id %>, this)">
+                                        Adicionar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                        <% } %>
+                    <% }) %>
+                    <% } else { %>
+                    <p style="text-align: center; width: 100%;">Nenhum produto cadastrado no momento. Volte em breve!</p>
+                    <% } %>
+                </div>
             </section>
         </div>
-        <%- include('partials/modals') %>
-
-            <div id="productDetailModal" class="modal">
-                <div class="modal-content product-detail-content">
-                    <span class="close" onclick="closeProductModal()">&times;</span>
-                    <div id="modalProductContent">
-                    </div>
-                </div>
-            </div>
     </main>
 
     <%- include('partials/modals') %>
 
+    <div id="productDetailModal" class="modal">
+        <div class="modal-content product-detail-content">
+            <span class="close" onclick="closeProductModal()">&times;</span>
+            <div id="modalProductContent">
+                </div>
+        </div>
+    </div>
 
-        <script>
-            const allProducts = <% - JSON.stringify(produtos || []) %>;
-        </script>
+    <script>
+        // A variável allProducts é definida aqui, antes de carregar o script.js
+        const allProducts = <%- JSON.stringify(produtos || []) %>;
+    </script>
+    <script src="/js/script.js"></script>
 
-        <script src="/js/script.js"></script>
-
-        <style>
-            .admin-btn-fixo {
-                position: fixed;
-                top: 20px;
-                right: 30px;
-                z-index: 2001;
-            }
-
-            .product-card {
-                display: flex;
-                flex-direction: column;
-                opacity: 0;
-                animation: slideInUp 0.5s ease forwards;
-            }
-
-            .product-card.hidden {
-                display: none;
-            }
-
-            @keyframes slideInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        </style>
+    <style>
+        .admin-btn-fixo { position: fixed; top: 20px; right: 30px; z-index: 2001; }
+        .product-card { display: flex; flex-direction: column; opacity: 0; animation: slideInUp 0.5s ease forwards; }
+        .product-card.hidden { display: none; }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </body>
-
 </html>
