@@ -24,6 +24,12 @@ class Usuario {
     const [rows] = await pool.query("SELECT * FROM usuarios WHERE email = ?", [email]);
     return rows[0];
   }
+
+  // Buscar usuário por ID (para exibir perfil)
+  static async buscarPorId(id) {
+    const [rows] = await pool.query("SELECT id, nome, email, telefone FROM usuarios WHERE id = ?", [id]);
+    return rows[0];
+  }
 }
 
 module.exports = Usuario;

@@ -19,7 +19,7 @@
                     <li><a href="/categories">Categorias</a></li>
                     <li><a href="/">Cardápio</a></li>
                     <li><a href="#sobre" class="active">Sobre</a></li>
-                    <li><a href="/checkout">Finalizar Pedido</a></li>
+                    <li id="navCheckout" style="display:none;"><a href="/checkout">Finalizar Pedido</a></li>
                 </ul>
                 <div class="nav-actions">
                     <button class="login-btn">👤 Entrar</button>
@@ -416,6 +416,28 @@
                 }
             });
         });
+    });
+    </script>
+    <script>
+    // Mostrar/ocultar link 'Finalizar Pedido' com base no conteúdo do carrinho
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateCheckoutLink() {
+            try {
+                var cart = JSON.parse(localStorage.getItem('cart')) || [];
+                var navCheckout = document.getElementById('navCheckout');
+                if (!navCheckout) return;
+                var totalItems = cart.reduce(function(sum, it){ return sum + (it.quantity||0); }, 0);
+                navCheckout.style.display = totalItems > 0 ? 'block' : 'none';
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        // Inicial
+        updateCheckoutLink();
+
+        // Atualiza ao receber eventos do script principal
+        window.addEventListener('cartUpdated', function() { updateCheckoutLink(); });
     });
     </script>
     <style>

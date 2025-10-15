@@ -56,6 +56,13 @@ function addToCart(event, productId, btn) {
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 
+    // Notifica outras partes da página (ex: About) que o carrinho foi atualizado
+    try {
+        window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { count: cart.reduce((t,i)=>t+i.quantity,0) } }));
+    } catch (e) {
+        // fall back silently
+    }
+
     if(btn) {
         btn.disabled = true;
         btn.textContent = 'Adicionado!';
@@ -145,6 +152,16 @@ function logout() {
 function toggleDropdown() {
     const dropdown = document.getElementById('userDropdown');
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+function showProfile() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.id) {
+        window.location.href = `/usuario/${user.id}`;
+    } else {
+        alert('Faça login para ver seu perfil.');
+        openAuthModal();
+    }
 }
 
 function showOrders() {

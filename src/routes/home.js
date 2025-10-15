@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const homeController = require('../controllers/homeController');
+const usuarioController = require('../controllers/usuarioController');
 
 // Rota principal - Landing Page
 router.get('/', homeController.index);
@@ -10,6 +11,9 @@ router.get('/about', homeController.about);
 
 // Rota para página de serviços (preparada para futuro)
 router.get('/categories', homeController.categories);
+
+// Rota para exibir perfil do usuário
+router.get('/usuario/:id', usuarioController.mostrar);
 
 // Rota para processar formulário de contato
 router.post('/contact', homeController.contact);

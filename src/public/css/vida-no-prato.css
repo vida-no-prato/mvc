@@ -8,6 +8,29 @@ body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #f0
 .logo::before { content: "🌱"; font-size: 32px; }
 .back-btn { background: transparent; color: #2e7d32; border: 2px solid #4caf50; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; text-decoration: none; display: flex; align-items: center; gap: 8px; }
 .back-btn:hover { background: #4caf50; color: white; transform: translateY(-2px); }
+/* Public 'Voltar ao Início' button - match site primary buttons */
+.btn-voltar-inicio {
+    background: transparent;
+    color: #2e7d32;
+    border: 2px solid #4caf50;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative; /* public pages: not fixed */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.btn-voltar-inicio:hover {
+    background: #4caf50;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.18);
+}
 /* ...demais estilos omitidos para brevidade... */
 
 /* Responsividade */

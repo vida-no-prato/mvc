@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/vida-no-prato.css">
+</head>
+<body>
+    <a href="/" class="btn-voltar-inicio">← Voltar ao Início</a>
+    <div class="container" style="margin-top: 100px; max-width: 720px;">
+        <h2 class="section-title">Meu Perfil</h2>
+        <div style="background: white; padding: 24px; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.06);">
+            <p><strong>Nome:</strong> <%= usuario.nome %></p>
+            <p><strong>Email:</strong> <%= usuario.email %></p>
+            <p><strong>Telefone:</strong> <%= usuario.telefone || '—' %></p>
+
+            <div style="margin-top: 20px; display:flex; gap:12px;">
+                <a href="/" class="back-btn">← Voltar</a>
+                <a href="/auth" class="login-btn">Editar Perfil</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
