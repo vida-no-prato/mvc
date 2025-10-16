@@ -25,7 +25,7 @@
                     <button class="login-btn">👤 Entrar</button>
                     <button class="cart-btn">
                         🛒 Carrinho
-                        <span class="cart-count">0</span>
+                        <span class="cart-count" id="cartCount">0</span>
                     </button>
                 </div>
             </nav>
@@ -384,15 +384,14 @@
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <script src="/js/script.js"></script>
     <script>
     // Corrige botões de login e carrinho na página About
     document.addEventListener('DOMContentLoaded', function() {
-        // Botão de login
+        // Botão de login (abre modal comum se disponível)
         var loginBtn = document.querySelector('.login-btn');
         if (loginBtn) {
             loginBtn.addEventListener('click', function() {
-                // Se existir modal de autenticação, exibe
                 var authModal = document.getElementById('authModal');
                 if (authModal) {
                     authModal.style.display = 'flex';
@@ -401,16 +400,16 @@
                 }
             });
         }
-        // Botão do carrinho
+
+        // Botão do carrinho: usa a função compartilhada openCart() definida em /js/script.js
         var cartBtns = document.querySelectorAll('.cart-btn');
         cartBtns.forEach(function(btn) {
             btn.addEventListener('click', function(e) {
-                // Se for o botão fixo do admin, ignora
                 if (btn.classList.contains('admin-btn-fixo')) return;
-                // Se existir modal do carrinho, exibe
-                var cartModal = document.getElementById('cartModal');
-                if (cartModal) {
-                    cartModal.style.display = 'block';
+                // Se o modal compartilhado existir, abre com openCart(); senão vai para checkout
+                var modal = document.getElementById('cartModal');
+                if (modal && typeof openCart === 'function') {
+                    openCart();
                 } else {
                     window.location.href = '/checkout';
                 }
@@ -440,6 +439,8 @@
         window.addEventListener('cartUpdated', function() { updateCheckoutLink(); });
     });
     </script>
+    <!-- include shared modals (auth + cart) so About uses the same cart markup/behavior as other pages -->
+    <%- include('partials/modals') %>
     <style>
         .logo-emoji {
             display: inline-block;

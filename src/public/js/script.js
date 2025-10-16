@@ -22,9 +22,16 @@ function togglePassword(inputId){
 }
 
 // --- LÓGICA DE PRODUTOS E FILTROS ---
-function filterProducts(category) {
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+function filterProducts(category, btn) {
+    // Remove active from all filter buttons
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    // If a button was passed (clicked), mark it active. Otherwise try to find by data-slug
+    if (btn && btn.classList) {
+        btn.classList.add('active');
+    } else {
+        const found = document.querySelector(`.filter-btn[data-slug="${category}"]`);
+        if (found) found.classList.add('active');
+    }
 
     const productCards = document.querySelectorAll('.product-card');
     productCards.forEach(card => {
@@ -263,6 +270,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(data.message);
             }
         });
+    }
+
+    // If server injected an initialCategoria variable, apply the filter on load
+    try {
+        if (typeof initialCategoria !== 'undefined' && initialCategoria) {
+            // small timeout to allow DOM to render product cards
+            setTimeout(() => {
+                filterProducts(initialCategoria);
+                // If category was specified (not 'todos'), scroll to products
+                if (initialCategoria && initialCategoria !== 'todos') {
+                    const productsSection = document.getElementById('produtos');
+                    if (productsSection) productsSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 120);
+        }
+    } catch (e) {
+        // no-op
     }
 });
 

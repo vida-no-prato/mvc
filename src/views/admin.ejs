@@ -40,7 +40,7 @@
             <div id="welcomeAnimation"
                 style="display:none;position:fixed;bottom:30px;right:30px;z-index:2000;min-width:340px;padding:22px 32px;background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(46,125,50,0.18);font-size:1.25rem;">
                 <span style="font-size:1.7rem;vertical-align:middle;margin-right:10px;">🌱</span>
-                Bem-vindo ao painel administrativo!
+                Bem-vindo ao Painel dos Colaboradores!
             </div>
         </header>
 
@@ -71,7 +71,7 @@
                             id="productPrice" required></div>
                     <div class="form-group"><label>Categoria *</label><select id="productCategory" required></select>
                     </div>
-                    <div class="form-group"><label>Ícone (Emoji) *</label><input type="text" id="productEmoji" required>
+                    <div class="form-group"><label>Ícone (Emoji)</label><input type="text" id="productEmoji">
                     </div>
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label>Imagem do Produto (PNG, JPG, GIF)</label>
@@ -107,8 +107,8 @@
                     <div class="form-group"><label>Nome *</label><input type="text" id="categoryName" required></div>
                     <div class="form-group"><label>Chave *</label><input type="text" id="categoryKey" required></div>
                     <div class="form-group">
-                        <label>Ícone *</label>
-                        <input type="hidden" id="categoryEmoji" required>
+                        <label>Ícone</label>
+                        <input type="hidden" id="categoryEmoji">
                         <div class="emoji-grid">
                             <button type="button" class="emoji-btn" data-emoji="🥗">🥗</button>
                             <button type="button" class="emoji-btn" data-emoji="🍲">🍲</button>
@@ -269,8 +269,27 @@
 
         window.deleteProduct = async function (id) {
             if (confirm('Tem certeza que deseja excluir este produto?')) {
-                await fetch(`/produtos/${id}`, { method: 'DELETE' });
-                displayProducts();
+                const res = await fetch(`/produtos/${id}`, { method: 'DELETE' });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    const message = err.message || 'Erro ao excluir produto.';
+                    // If blocked by FK constraint, offer forced deletion
+                    if (res.status === 400 && message.includes('pedido')) {
+                        if (confirm(message + '\n\nDeseja forçar a exclusão (removerá os itens de pedidos relacionados)?')) {
+                            const res2 = await fetch(`/produtos/${id}?force=true`, { method: 'DELETE' });
+                            if (!res2.ok) {
+                                const err2 = await res2.json().catch(() => ({}));
+                                alert(err2.message || 'Erro ao forçar exclusão do produto.');
+                            } else {
+                                displayProducts();
+                            }
+                        }
+                    } else {
+                        alert(message);
+                    }
+                } else {
+                    displayProducts();
+                }
             }
         };
 
@@ -290,9 +309,29 @@
 
         window.deleteCategory = async function (id) {
             if (confirm('Tem certeza que deseja excluir esta categoria?')) {
-                await fetch(`/categorias/${id}`, { method: 'DELETE' });
-                populateCategories();
-                displayCategories();
+                const res = await fetch(`/categorias/${id}`, { method: 'DELETE' });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    const message = err.message || 'Erro ao excluir categoria.';
+                    // If blocked because category has products, offer forced deletion
+                    if (res.status === 400 && message.includes('produtos')) {
+                        if (confirm(message + '\n\nDeseja forçar a exclusão (removerá todos os produtos e itens relacionados)?')) {
+                            const res2 = await fetch(`/categorias/${id}?force=true`, { method: 'DELETE' });
+                            if (!res2.ok) {
+                                const err2 = await res2.json().catch(() => ({}));
+                                alert(err2.message || 'Erro ao forçar exclusão da categoria.');
+                            } else {
+                                populateCategories();
+                                displayCategories();
+                            }
+                        }
+                    } else {
+                        alert(message);
+                    }
+                } else {
+                    populateCategories();
+                    displayCategories();
+                }
             }
         };
 

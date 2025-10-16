@@ -7,22 +7,76 @@
     <link rel="stylesheet" href="/css/vida-no-prato.css">
 </head>
 <body>
-    <a href="/" class="btn-voltar-inicio">← Voltar ao Início</a>
-    <h2 class="section-title" style="margin-top: 80px;">Nossas Especialidades</h2>
+    <a href="/" class="btn-voltar-inicio" style="display:inline-block; margin-top:24px; margin-left:12px;">← Voltar ao Início</a>
+    <h2 class="section-title" style="margin-top: 40px;">Nossas Especialidades</h2>
 
-    <section class="categories" id="categorias">
-        <div class="category-grid">
-            <% categorias.forEach(categoria => { %>
-                <a href="/?categoria=<%= categoria.slug %>" class="category-card-link">
-                    <div class="category-card">
-                        <span class="category-icon"><%= categoria.emoji %></span>
-                        <h3><%= categoria.nome %></h3>
-                        <p><%= categoria.descricao %></p>
+    <section class="categories <%= (typeof currentCategoria !== 'undefined' && currentCategoria && currentCategoria !== 'todos') ? 'single' : '' %>" id="categorias">
+        <div class="category-grid <%= (typeof currentCategoria !== 'undefined' && currentCategoria && currentCategoria !== 'todos') ? 'single' : '' %>">
+            <% if (typeof currentCategoria !== 'undefined' && currentCategoria && currentCategoria !== 'todos') { %>
+                <div style="width:100%; display:flex; justify-content:center; margin-bottom:18px;">
+                    <a href="/categories" class="back-to-categories">← Voltar às Categorias</a>
+                </div>
+                <% const selected = categorias.find(c => c.slug === currentCategoria); %>
+                <% if (selected) { %>
+                    <a href="/categories?categoria=<%= selected.slug %>" class="category-card-link">
+                        <div class="category-card category-selected">
+                            <span class="category-icon"><%= selected.emoji %></span>
+                            <h3><%= selected.nome %></h3>
+                            <p><%= selected.descricao %></p>
+                        </div>
+                    </a>
+                <% } else { %>
+                    <% categorias.forEach(categoria => { %>
+                        <a href="/categories?categoria=<%= categoria.slug %>" class="category-card-link">
+                            <div class="category-card">
+                                <span class="category-icon"><%= categoria.emoji %></span>
+                                <h3><%= categoria.nome %></h3>
+                                <p><%= categoria.descricao %></p>
+                            </div>
+                        </a>
+                    <% }) %>
+                <% } %>
+            <% } else { %>
+                <% categorias.forEach(categoria => { %>
+                    <a href="/categories?categoria=<%= categoria.slug %>" class="category-card-link">
+                        <div class="category-card">
+                            <span class="category-icon"><%= categoria.emoji %></span>
+                            <h3><%= categoria.nome %></h3>
+                            <p><%= categoria.descricao %></p>
+                        </div>
+                    </a>
+                <% }) %>
+            <% } %>
+        </div>
+    </section>
+
+    <% if (typeof produtos !== 'undefined' && produtos.length > 0) { %>
+    <section class="products" id="produtos">
+        <h2 class="section-title">Produtos na categoria</h2>
+        <div class="products-grid" id="productsGrid">
+            <% produtos.forEach((product, index) => { %>
+                <div class="product-card" data-category="<%= product.categoria_slug || 'sem-categoria' %>" style="animation-delay: <%= index * 0.05 %>s;" onclick='showProductDetails(<%- JSON.stringify(product) %>)'>
+                    <img class="product-image" src="/images/uploads/<%= product.imagem || '../default-plate.jpg' %>" alt="<%= product.nome %>" onerror="this.onerror=null; this.src='/images/default-plate.jpg';">
+                    <div class="product-info">
+                        <h3 class="product-name"><%= product.emoji || '🍲' %> <%= product.nome %></h3>
+                        <p class="product-description"><%= product.descricao %></p>
+                        <div class="product-footer">
+                            <span class="product-price">
+                                <% const price = Number(product.preco); %>
+                                <% if (!isNaN(price) && price >= 0) { %>
+                                    R$ <%= price.toFixed(2).replace('.', ',') %>
+                                <% } else { %>
+                                    Consulte
+                                <% } %>
+                            </span>
+                            <button class="add-to-cart" onclick="addToCart(event, <%= product.id %>, this)">Adicionar</button>
+                        </div>
                     </div>
-                </a>
+                </div>
             <% }) %>
         </div>
     </section>
+    <% } %>
 
     <script src="/js/script.js"></script>
 

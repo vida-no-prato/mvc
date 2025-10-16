@@ -28,6 +28,20 @@ exports.editar = async (req, res) => {
 
 exports.excluir = async (req, res) => {
   const { id } = req.params;
-  await Produto.excluir(id);
-  res.json({ success: true });
+  const force = req.query && req.query.force === 'true';
+  try {
+    if (force) {
+      await Produto.excluirComItens(id);
+    } else {
+      await Produto.excluir(id);
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Erro ao excluir produto:', err);
+    // MySQL foreign key constraint error (cannot delete or update a parent row)
+    if (err && (err.code === 'ER_ROW_IS_REFERENCED_2' || err.errno === 1451)) {
+      return res.status(400).json({ success: false, message: 'Não é possível excluir este produto: existe(m) pedido(s) que o referenciam.' });
+    }
+    res.status(500).json({ success: false, message: 'Erro ao excluir produto.' });
+  }
 };

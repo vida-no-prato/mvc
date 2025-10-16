@@ -61,10 +61,10 @@
 
                 <% if (typeof categorias !== 'undefined' && categorias.length > 0) { %>
                 <div class="filter-bar" id="filterBar">
-                    <button class="filter-btn active" onclick="filterProducts('todos')">Todos</button>
+                    <button class="filter-btn <%= currentCategoria === 'todos' ? 'active' : '' %>" data-slug="todos" onclick="filterProducts('todos', this)">Todos</button>
                     <% categorias.forEach(categoria => { %>
                         <% if (categoria && categoria.slug && categoria.nome) { %>
-                            <button class="filter-btn" onclick="filterProducts('<%= categoria.slug %>')">
+                            <button class="filter-btn <%= currentCategoria === categoria.slug ? 'active' : '' %>" data-slug="<%= categoria.slug %>" onclick="filterProducts('<%= categoria.slug %>', this)">
                                 <%= categoria.emoji || '🥗' %> <%= categoria.nome %>
                             </button>
                         <% } %>
@@ -127,6 +127,8 @@
     <script>
         // A variável allProducts é definida aqui, antes de carregar o script.js
         const allProducts = <%- JSON.stringify(produtos || []) %>;
+        // Se o servidor passou currentCategoria, aplicamos o filtro inicial
+        const initialCategoria = '<%= currentCategoria %>' || 'todos';
     </script>
     <script src="/js/script.js"></script>
 

@@ -22,6 +22,21 @@ exports.editar = async (req, res) => {
 
 exports.excluir = async (req, res) => {
   const { id } = req.params;
-  await Categoria.excluir(id);
-  res.json({ success: true });
+  const force = req.query && req.query.force === 'true';
+  try {
+    if (force) {
+      // Forçar exclusão com cascade
+      await Categoria.excluirComProdutos(id);
+    } else {
+      const hasProducts = await Categoria.temProdutos(id);
+      if (hasProducts) {
+        return res.status(400).json({ success: false, message: 'Não é possível excluir a categoria: existem produtos associados.' });
+      }
+      await Categoria.excluir(id);
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Erro ao excluir categoria:', err);
+    res.status(500).json({ success: false, message: 'Erro ao excluir categoria.' });
+  }
 };

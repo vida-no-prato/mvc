@@ -6,14 +6,21 @@ class HomeController {
     async index(req, res) {
         try {
             // Buscar produtos e categorias do banco de dados
-            const produtos = await Produto.listar();
             const categorias = await Categoria.listar();
+            const categoriaSlug = req.query.categoria;
+            let produtos;
+            if (categoriaSlug) {
+                produtos = await Produto.listarPorCategoria(categoriaSlug);
+            } else {
+                produtos = await Produto.listar();
+            }
             
             // Renderizar a view com os dados dinâmicos
             res.render('index', {
                 title: 'Vida no Prato - Comida Saudável',
                 produtos: produtos,
                 categorias: categorias,
+                currentCategoria: categoriaSlug || 'todos',
                 currentYear: new Date().getFullYear()
             });
         } catch (error) {
@@ -29,10 +36,19 @@ class HomeController {
     async categories(req, res) {
         try {
             const categorias = await Categoria.listar();
-            
+            const categoriaSlug = req.query.categoria;
+            let produtos = [];
+            if (categoriaSlug) {
+                // load products for this category
+                const Produto = require('../models/produto');
+                produtos = await Produto.listarPorCategoria(categoriaSlug);
+            }
+
             res.render('categories', {
                 title: 'Categorias - Vida no Prato',
                 categorias: categorias,
+                produtos: produtos,
+                currentCategoria: categoriaSlug || 'todos',
                 currentYear: new Date().getFullYear()
             });
         } catch (error) {
