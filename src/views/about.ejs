@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/css/about.css">
 </head>
 <body>
-    <!-- Botão Painel Admin fixo no canto superior direito -->
-    <button class="cart-btn admin-btn-fixo" onclick="window.location.href='/admin'">Painel Admin</button>
+    <!-- Botão Para Colaboradores fixo no canto superior direito -->
+    <button class="cart-btn admin-btn-fixo" onclick="window.location.href='/admin'">Para Colaboradores</button>
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -22,8 +22,18 @@
                     <li id="navCheckout" style="display:none;"><a href="/checkout">Finalizar Pedido</a></li>
                 </ul>
                 <div class="nav-actions">
-                    <button class="login-btn">👤 Entrar</button>
-                    <button class="cart-btn">
+                    <button class="login-btn" id="loginBtn" onclick="openAuthModal()">👤 Entrar</button>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <div class="user-avatar" onclick="toggleDropdown()" id="userAvatar">
+                            A
+                        </div>
+                        <div class="dropdown" id="userDropdown" style="display: none;">
+                            <a href="#" onclick="showProfile()">👤 Meu Perfil</a>
+                            <a href="#" onclick="showOrders()">📦 Meus Pedidos</a>
+                            <a href="#" onclick="logout()">🚪 Sair</a>
+                        </div>
+                    </div>
+                    <button class="cart-btn" onclick="openCart()">
                         🛒 Carrinho
                         <span class="cart-count" id="cartCount">0</span>
                     </button>
@@ -384,64 +394,80 @@
         </div>
     </footer>
 
-    <script src="/js/script.js"></script>
-    <script>
-    // Corrige botões de login e carrinho na página About
-    document.addEventListener('DOMContentLoaded', function() {
-        // Botão de login (abre modal comum se disponível)
-        var loginBtn = document.querySelector('.login-btn');
-        if (loginBtn) {
-            loginBtn.addEventListener('click', function() {
-                var authModal = document.getElementById('authModal');
-                if (authModal) {
-                    authModal.style.display = 'flex';
-                } else {
-                    window.location.href = '/admin';
-                }
-            });
-        }
-
-        // Botão do carrinho: usa a função compartilhada openCart() definida em /js/script.js
-        var cartBtns = document.querySelectorAll('.cart-btn');
-        cartBtns.forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                if (btn.classList.contains('admin-btn-fixo')) return;
-                // Se o modal compartilhado existir, abre com openCart(); senão vai para checkout
-                var modal = document.getElementById('cartModal');
-                if (modal && typeof openCart === 'function') {
-                    openCart();
-                } else {
-                    window.location.href = '/checkout';
-                }
-            });
-        });
-    });
-    </script>
-    <script>
-    // Mostrar/ocultar link 'Finalizar Pedido' com base no conteúdo do carrinho
-    document.addEventListener('DOMContentLoaded', function() {
-        function updateCheckoutLink() {
-            try {
-                var cart = JSON.parse(localStorage.getItem('cart')) || [];
-                var navCheckout = document.getElementById('navCheckout');
-                if (!navCheckout) return;
-                var totalItems = cart.reduce(function(sum, it){ return sum + (it.quantity||0); }, 0);
-                navCheckout.style.display = totalItems > 0 ? 'block' : 'none';
-            } catch (e) {
-                // ignore
-            }
-        }
-
-        // Inicial
-        updateCheckoutLink();
-
-        // Atualiza ao receber eventos do script principal
-        window.addEventListener('cartUpdated', function() { updateCheckoutLink(); });
-    });
-    </script>
-    <!-- include shared modals (auth + cart) so About uses the same cart markup/behavior as other pages -->
     <%- include('partials/modals') %>
+
+    <script>
+        // Garantir que `allProducts` exista quando a página não o recebeu do servidor
+        // Não declaramos `cart` aqui porque o `script.js` já faz isso (evita redeclaração `let`).
+        window.allProducts = window.allProducts || [];
+    </script>
+    
+    <script src="/js/script.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicialização da UI
+            const user = JSON.parse(localStorage.getItem('user'));
+            updateUserUI(user);
+            updateCartCount();
+            
+            // Link do checkout
+            function updateCheckoutLink() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const navCheckout = document.getElementById('navCheckout');
+                if (navCheckout) {
+                    const totalItems = cart.reduce((sum, it) => sum + (it.quantity || 0), 0);
+                    navCheckout.style.display = totalItems > 0 ? 'block' : 'none';
+                }
+            }
+            
+            updateCheckoutLink();
+            window.addEventListener('cartUpdated', updateCheckoutLink);
+        });
+    </script>
+    
     <style>
+        /* Estilos essenciais para o menu do usuário */
+        .user-menu {
+            position: relative;
+            display: none;
+        }
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 8px 0;
+            display: none;
+            z-index: 1000;
+            min-width: 180px;
+        }
+        .dropdown a {
+            display: block;
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .dropdown a:hover {
+            background: #f5f5f5;
+        }
+        
+        /* Estilo do logo animado */
         .logo-emoji {
             display: inline-block;
             animation: bounce 2s infinite;
