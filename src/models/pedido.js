@@ -1,7 +1,6 @@
 const pool = require("../config/banco-dados");
 
 class Pedido {
-  // Busca os pedidos de um usuário usando a sua estrutura de tabela
   static async buscarPorUsuarioId(usuarioId) {
     const [pedidos] = await pool.query(
       `SELECT 
@@ -16,7 +15,6 @@ class Pedido {
       [usuarioId]
     );
 
-    // Para cada pedido, busca seus itens na tabela itens_pedido
     for (const pedido of pedidos) {
       const [itens] = await pool.query(
         `SELECT 
@@ -34,7 +32,6 @@ class Pedido {
     return pedidos;
   }
 
-  // Cria um novo pedido usando a sua estrutura de tabela
   static async criar(dadosPedido) {
     const { 
         usuario_id, 
@@ -52,7 +49,6 @@ class Pedido {
     try {
       await connection.beginTransaction();
 
-      // 1. Inserir na tabela 'pedidos' com todas as colunas
       const [pedidoResult] = await connection.query(
         `INSERT INTO pedidos 
             (numero_pedido, usuario_id, cep, cidade, endereco, numero, bairro, metodo_pagamento, subtotal, taxa_entrega, total, status) 
@@ -63,8 +59,8 @@ class Pedido {
             endereco.cep, 
             endereco.cidade, 
             endereco.endereco, 
-            endereco.numero || 'N/A', // Adicionado campo 'numero'
-            endereco.bairro || 'N/A', // Adicionado campo 'bairro'
+            endereco.numero || 'N/A', 
+            endereco.bairro || 'N/A', 
             metodo_pagamento, 
             subtotal, 
             taxa_entrega, 
@@ -73,7 +69,6 @@ class Pedido {
       );
       const pedidoId = pedidoResult.insertId;
 
-      // 2. Inserir cada item na tabela 'itens_pedido'
       for (const item of cart) {
         const itemSubtotal = item.quantity * item.preco;
         await connection.query(

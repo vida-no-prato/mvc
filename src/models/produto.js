@@ -48,16 +48,13 @@ class Produto {
     await pool.query("DELETE FROM produtos WHERE id=?", [id]);
   }
 
-  // Forçar exclusão: remove primeiro os itens_pedido que referenciam o produto, depois o produto
   static async excluirComItens(id) {
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
 
-      // Apaga itens de pedido relacionados (se houver)
       await connection.query("DELETE FROM itens_pedido WHERE produto_id = ?", [id]);
 
-      // Apaga o produto
       await connection.query("DELETE FROM produtos WHERE id = ?", [id]);
 
       await connection.commit();
