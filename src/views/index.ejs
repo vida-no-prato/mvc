@@ -14,8 +14,28 @@
             <nav class="nav">
                 <div class="logo">Vida no Prato</div>
                 <ul class="nav-links">
+ 
                     <li><a href="/">Início</a></li>
-                    <li><a href="/categories">Categorias</a></li>
+                    
+                    <li class="nav-item-dropdown">
+                        <a href="/categories">Categorias</a> <ul class="dropdown-menu">
+                            <% if (typeof categorias !== 'undefined' && categorias.length > 0) { %>
+                                <% categorias.slice(0, 5).forEach(categoria => { // Mostra apenas as 5 primeiras, por exemplo
+                                    if (categoria && categoria.slug) { %>
+                                        <li>
+                                            <a href="/categories?categoria=<%= categoria.slug %>">
+                                                <%= categoria.emoji || '🥗' %> <%= categoria.nome %>
+                                            </a>
+                                        </li>
+                                    <% } 
+                                }) %>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="/categories" class="view-all">Ver Todas as Categorias</a></li>
+                            <% } else { %>
+                                <li><a href="/categories">Ver Categorias</a></li>
+                            <% } %>
+                        </ul>
+                    </li>
                     <li><a href="#produtos">Cardápio</a></li>
                     <li><a href="/about">Sobre</a></li>
                 </ul>

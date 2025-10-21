@@ -1633,3 +1633,69 @@ body {
 @media (max-width: 768px) {
     .product-image { aspect-ratio: 16 / 9; max-height: 200px; }
 }
+/* --- Estilos do Novo Menu Dropdown de Categorias (Versão Suave) --- */
+
+/* 1. Torna o item <li> da navegação um container para o menu */
+.nav-links .nav-item-dropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+/* 2. Oculta e estiliza o menu suspenso (COM TRANSIÇÃO SUAVE) */
+.nav-item-dropdown .dropdown-menu {
+    opacity: 0; /* Começa invisível */
+    visibility: hidden; /* Escondido para acessibilidade e cliques */
+    transform: translateY(10px); /* Começa 10px abaixo */
+    
+    position: absolute;
+    top: 100%; /* Posiciona logo abaixo do link "Categorias" */
+    left: 0;
+    background: #ffffff;
+    min-width: 230px; 
+    list-style: none;
+    padding: 10px 0;
+    margin-top: 5px; 
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    z-index: 1001; 
+    
+    /* AQUI ESTÁ A TRANSIÇÃO SUAVE */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+/* 3. Mostra o menu quando o mouse passa sobre o <li> pai */
+.nav-links .nav-item-dropdown:hover .dropdown-menu {
+    opacity: 1; /* Torna visível */
+    visibility: visible; /* Torna acessível */
+    transform: translateY(0); /* Sobe para a posição final */
+}
+
+/* 4. Estiliza os links <a> dentro do menu (Igual ao anterior) */
+.nav-item-dropdown .dropdown-menu a {
+    display: block;
+    padding: 10px 20px;
+    color: #333; 
+    text-decoration: none;
+    white-space: nowrap; 
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* 5. Efeito hover nos links <a> (Igual ao anterior) */
+.nav-item-dropdown .dropdown-menu a:hover {
+    background-color: var(--page-bg, #f8fdf8); 
+    color: var(--primary-green, #2e7d32); 
+}
+
+/* (Opcional) Estilo para o divisor (Igual ao anterior) */
+.nav-item-dropdown .dropdown-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 8px 0;
+}
+
+/* (Opcional) Estilo para o link "Ver Todas" (Igual ao anterior) */
+.nav-item-dropdown .dropdown-menu a.view-all {
+    text-align: center;
+    font-weight: bold;
+    color: var(--accent-green, #4caf50); 
+}
